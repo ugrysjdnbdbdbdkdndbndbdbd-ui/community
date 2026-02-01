@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="组织学习理论 - 社区的学习机制和知识管理">
+    <title>组织学习理论 - 社区洞察全景 Akashic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="wisdom_capsules.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif SC', Georgia, serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 大道至简模块样式 */
+        .simplicity-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin-top: 4rem;
+            margin-bottom: 3rem;
+        }
+        .quote-mark {
+            font-family: serif;
+            font-size: 8rem;
+            line-height: 1;
+            opacity: 0.15;
+            position: absolute;
+            top: -1rem;
+            left: 2rem;
+        }
+        /* 智慧胶囊样式 */
+        .wisdom-capsule {
+            border-left-width: 4px;
+            border-left-style: solid;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .wisdom-capsule:hover {
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <a href="社区推导看板.html" class="text-indigo-600 hover:text-indigo-700 font-medium">← 返回主系统</a>
+                    <span class="text-gray-300">|</span>
+                    <span class="text-gray-700 font-semibold">组织学习理论</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <section class="text-center space-y-6 max-w-4xl mx-auto mb-10">
+            <div class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold tracking-widest uppercase mb-2">Perspective 17: Organizational Learning</div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 serif">
+                组织学习理论：<span class="text-amber-700">单环与双环</span>与<span class="text-yellow-600">知识螺旋</span>
+            </h1>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                学习型社区具有开放、反思、共享的特征。理解单环学习、双环学习和知识螺旋，可以帮助我们构建更好的学习型社区。
+            </p>
+        </section>
+
+        <!-- Wisdom Capsules -->
+        <section id="wisdom-learning" class="mb-10">
+            <!-- Injected by JS -->
+        </section>
+
+        <!-- Theory Framework -->
+        <section class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10 mb-12">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <!-- Left: Theory Cards -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 serif mb-4">组织学习理论框架</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            学习型社区具有开放、反思、共享的特征。理解单环学习、双环学习和知识螺旋，可以帮助我们构建更好的学习型社区。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div onclick="showTheoryInsight('single-loop')" class="cursor-pointer bg-amber-50 hover:bg-amber-100 p-4 rounded-xl transition-all border border-amber-200 hover:border-amber-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-amber-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">1</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-amber-900 mb-1">单环学习</h4>
+                                    <p class="text-xs text-gray-600">Single-Loop · 持续改进</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('double-loop')" class="cursor-pointer bg-yellow-50 hover:bg-yellow-100 p-4 rounded-xl transition-all border border-yellow-200 hover:border-yellow-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-yellow-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">2</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-yellow-900 mb-1">双环学习</h4>
+                                    <p class="text-xs text-gray-600">Double-Loop · 战略转型</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('knowledge-spiral')" class="cursor-pointer bg-amber-50 hover:bg-amber-100 p-4 rounded-xl transition-all border border-amber-200 hover:border-amber-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-amber-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">3</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-amber-900 mb-1">知识螺旋</h4>
+                                    <p class="text-xs text-gray-600">Knowledge Spiral · 经验转化</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('learning-community')" class="cursor-pointer bg-yellow-50 hover:bg-yellow-100 p-4 rounded-xl transition-all border border-yellow-200 hover:border-yellow-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-yellow-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">4</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-yellow-900 mb-1">学习型社区</h4>
+                                    <p class="text-xs text-gray-600">Learning Community · 开放共享</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-amber-50 to-yellow-50 p-5 rounded-2xl border border-amber-200">
+                        <h4 class="font-bold text-amber-900 text-sm mb-3 uppercase tracking-wide">理论洞察</h4>
+                        <div id="theory-insight-box" class="text-gray-700 text-sm leading-relaxed min-h-[100px]">
+                            点击左侧理论卡片，查看详细分析和社区产品应用案例。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Visualization -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Knowledge Spiral Chart -->
+                    <div class="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl border border-amber-200 p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <span>📊</span> 知识螺旋模型
+                        </h4>
+                        <div class="bg-white rounded-xl p-4">
+                            <div class="relative h-64">
+                                <canvas id="knowledgeSpiralChart"></canvas>
+                            </div>
+                            <div class="mt-4 grid grid-cols-4 gap-4 text-xs text-center">
+                                <div class="p-3 bg-amber-50 rounded-lg">
+                                    <div class="font-bold text-amber-700">隐性知识</div>
+                                    <div class="text-gray-600">个人经验</div>
+                                </div>
+                                <div class="p-3 bg-yellow-50 rounded-lg">
+                                    <div class="font-bold text-yellow-700">显性知识</div>
+                                    <div class="text-gray-600">文档化</div>
+                                </div>
+                                <div class="p-3 bg-orange-50 rounded-lg">
+                                    <div class="font-bold text-orange-700">组合知识</div>
+                                    <div class="text-gray-600">知识整合</div>
+                                </div>
+                                <div class="p-3 bg-amber-50 rounded-lg">
+                                    <div class="font-bold text-amber-700">内化知识</div>
+                                    <div class="text-gray-600">集体智慧</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theory Comparison Cards -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-amber-500 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl">🔄</span>
+                                <h5 class="font-bold text-amber-900">单环学习</h5>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-3">在现有框架内改进</p>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    <span>如何做得更好</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                    <span>持续优化流程</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    <span>数据驱动迭代</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-500 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl">🔁</span>
+                                <h5 class="font-bold text-yellow-900">双环学习</h5>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-3">质疑并改变框架</p>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                    <span>为什么要这样做</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                                    <span>改变核心假设</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span>战略转型</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Principles -->
+        <section class="bg-gradient-to-br from-amber-900 to-yellow-900 rounded-3xl shadow-xl p-8 md:p-10 mb-12 text-white">
+            <h3 class="text-2xl md:text-3xl font-bold mb-8 text-center serif">核心原则</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🔄</div>
+                    <h4 class="font-bold text-lg mb-2">建立数据监控机制</h4>
+                    <p class="text-sm text-amber-100 leading-relaxed">建立数据监控和快速迭代机制，持续优化现有流程和功能，提升运营效率（单环学习）。</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🔁</div>
+                    <h4 class="font-bold text-lg mb-2">定期审视核心假设</h4>
+                    <p class="text-sm text-amber-100 leading-relaxed">定期审视社区的核心假设和价值，在必要时改变社区定位和运营策略，实现战略转型（双环学习）。</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🌀</div>
+                    <h4 class="font-bold text-lg mb-2">建立知识管理体系</h4>
+                    <p class="text-sm text-amber-100 leading-relaxed">建立知识管理体系（如Wiki、FAQ、最佳实践），将社区成员的经验转化为可复用的知识资产（知识螺旋）。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关产品推荐 -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-3xl shadow-lg border border-amber-100 p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center flex items-center justify-center gap-2">
+                    <span>📚</span> 相关产品推荐
+                </h3>
+                <p class="text-sm text-gray-600 text-center mb-6 leading-relaxed">
+                    <span class="font-semibold text-gray-700">理论实践：</span>以下产品在设计与运营中应用了本页面的<span class="text-amber-600 font-medium">组织学习理论、知识螺旋、学习型社区</span>等理论框架。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">GitHub</h4>
+                        <p class="text-xs text-gray-600 mb-3">文档和Wiki将经验转化为知识资产</p>
+                        <div class="text-xs text-amber-600 font-medium">知识螺旋 + 知识管理</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">知乎</h4>
+                        <p class="text-xs text-gray-600 mb-3">数据监控和快速迭代优化</p>
+                        <div class="text-xs text-amber-600 font-medium">单环学习 + 持续改进</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">Reddit</h4>
+                        <p class="text-xs text-gray-600 mb-3">审视并改变社区定位实现转型</p>
+                        <div class="text-xs text-amber-600 font-medium">双环学习 + 战略转型</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">Stack Overflow</h4>
+                        <p class="text-xs text-gray-600 mb-3">问答社区的知识沉淀机制</p>
+                        <div class="text-xs text-amber-600 font-medium">学习型社区 + 知识共享</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 大道至简 -->
+        <section class="simplicity-box bg-gradient-to-br from-amber-900 to-yellow-900">
+            <span class="quote-mark text-amber-500">"</span>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <div class="inline-block px-4 py-1 border border-amber-500 rounded-full text-amber-300 text-xs tracking-wider mb-6 uppercase">大道至简 · Organizational Learning</div>
+                <h2 class="text-2xl md:text-4xl font-bold mb-8 serif italic leading-tight">
+                    "学习型社区具有开放、反思、共享的特征，<br>成员不仅学习内容，还学习如何更好地参与社区。"
+                </h2>
+                <p class="text-sm md:text-base text-amber-100 opacity-80 mb-8 font-serif">— 组织学习理论</p>
+                <div class="h-px w-24 bg-amber-500 mx-auto mb-8 opacity-50"></div>
+                <p class="text-lg md:text-xl font-light text-gray-100">
+                    社区的本质是<span class="font-bold text-amber-400">学习型组织</span>，需要理解<span class="font-bold text-yellow-400">单环与双环学习</span>与<span class="font-bold text-orange-400">知识螺旋</span>。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Render Wisdom Capsules
+        function renderWisdomCapsules() {
+            const container = document.getElementById('wisdom-learning');
+            if (!container || !window.wisdomCapsules || !wisdomCapsules.learning) return;
+            
+            const capsules = wisdomCapsules.learning;
+            let html = '<div class="grid md:grid-cols-3 gap-4">';
+            
+            capsules.forEach((capsule) => {
+                const borderColor = capsule.type === 'pattern' ? 'border-green-500' : 
+                                   capsule.type === 'anti-pattern' ? 'border-red-500' : 'border-blue-500';
+                const typeBadge = capsule.type === 'pattern' ? '✅ 模式' : 
+                                 capsule.type === 'anti-pattern' ? '❌ 反模式' : '💡 洞察';
+                html += `
+                    <div class="wisdom-capsule ${borderColor}">
+                        <div class="type-badge bg-gray-100 text-gray-700">${typeBadge}</div>
+                        <h4>${capsule.title}</h4>
+                        <p>${capsule.content}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Show Theory Insight
+        function showTheoryInsight(type) {
+            const box = document.getElementById('theory-insight-box');
+            const insights = {
+                'single-loop': '单环学习是在现有框架内改进（如"如何做得更好"）。社区运营中的日常优化就是单环学习。建立数据监控和快速迭代机制，持续优化现有流程和功能，提升运营效率。',
+                'double-loop': '双环学习是质疑和改变现有框架（如"为什么要这样做"）。社区转型时需要双环学习。定期审视社区的核心假设和价值，在必要时改变社区定位和运营策略，实现战略转型。',
+                'knowledge-spiral': '组织学习形成知识螺旋：隐性知识→显性知识→组合知识→内化知识。社区需要将个人经验转化为集体知识。建立知识管理体系（如Wiki、FAQ、最佳实践），将社区成员的经验转化为可复用的知识资产。',
+                'learning-community': '学习型社区具有开放、反思、共享的特征。成员不仅学习内容，还学习如何更好地参与社区。鼓励成员分享经验、反思实践、互相学习，营造学习型社区氛围，提升整体能力。'
+            };
+            if (box && insights[type]) {
+                box.innerHTML = insights[type];
+            }
+        }
+
+        // Initialize Knowledge Spiral Chart
+        function initKnowledgeSpiralChart() {
+            const ctx = document.getElementById('knowledgeSpiralChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['隐性知识', '显性知识', '组合知识', '内化知识', '新隐性知识'],
+                    datasets: [{
+                        label: '知识水平',
+                        data: [30, 50, 70, 85, 100],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#f59e0b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '知识水平 (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '知识转化阶段'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderWisdomCapsules();
+            initKnowledgeSpiralChart();
+        });
+    </script>
+</body>
+</html>

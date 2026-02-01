@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Local data
+server/data/
+.env
+*.log
+
+# IDE / OS
+.DS_Store
+*.swp
+*.swo
+
+# Secrets
+firebase-key.json
+*.pem

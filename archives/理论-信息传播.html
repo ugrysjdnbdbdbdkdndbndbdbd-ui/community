@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="信息传播理论 - 社区产品中的信息扩散机制和传播规律">
+    <title>信息传播理论 - 社区洞察全景 Akashic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="wisdom_capsules.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif SC', Georgia, serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 大道至简模块样式 */
+        .simplicity-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin-top: 4rem;
+            margin-bottom: 3rem;
+        }
+        .quote-mark {
+            font-family: serif;
+            font-size: 8rem;
+            line-height: 1;
+            opacity: 0.15;
+            position: absolute;
+            top: -1rem;
+            left: 2rem;
+        }
+        /* 智慧胶囊样式 */
+        .wisdom-capsule {
+            border-left-width: 4px;
+            border-left-style: solid;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .wisdom-capsule:hover {
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <a href="社区推导看板.html" class="text-indigo-600 hover:text-indigo-700 font-medium">← 返回主系统</a>
+                    <span class="text-gray-300">|</span>
+                    <span class="text-gray-700 font-semibold">信息传播理论</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <section class="text-center space-y-6 max-w-4xl mx-auto mb-10">
+            <div class="inline-block px-3 py-1 bg-violet-100 text-violet-800 rounded-full text-xs font-bold tracking-widest uppercase mb-2">Perspective 15: Information Diffusion</div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 serif">
+                信息传播理论：<span class="text-violet-700">扩散机制</span>与<span class="text-purple-600">传播规律</span>
+            </h1>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                信息在社区中的传播遵循特定的扩散规律。理解这些规律，可以帮助我们设计更有效的内容分发机制、提升传播效率、避免信息茧房。
+            </p>
+        </section>
+
+        <!-- Wisdom Capsules -->
+        <section id="wisdom-diffusion" class="mb-10">
+            <!-- Injected by JS -->
+        </section>
+
+        <!-- Theory Framework -->
+        <section class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10 mb-12">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <!-- Left: Theory Cards -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 serif mb-4">信息传播理论框架</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            信息在社区中的传播遵循创新扩散曲线，了解每个阶段的特点和策略，可以优化内容分发机制。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div onclick="showTheoryInsight('diffusion-curve')" class="cursor-pointer bg-violet-50 hover:bg-violet-100 p-4 rounded-xl transition-all border border-violet-200 hover:border-violet-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-violet-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">1</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-violet-900 mb-1">扩散曲线</h4>
+                                    <p class="text-xs text-gray-600">Everett Rogers · 创新扩散</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('viral-spread')" class="cursor-pointer bg-purple-50 hover:bg-purple-100 p-4 rounded-xl transition-all border border-purple-200 hover:border-purple-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">2</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-purple-900 mb-1">病毒式传播</h4>
+                                    <p class="text-xs text-gray-600">K值模型 · 增长黑客</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('information-cocoon')" class="cursor-pointer bg-violet-50 hover:bg-violet-100 p-4 rounded-xl transition-all border border-violet-200 hover:border-violet-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-violet-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">3</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-violet-900 mb-1">信息茧房</h4>
+                                    <p class="text-xs text-gray-600">Cass Sunstein · 信息过滤</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="showTheoryInsight('critical-mass')" class="cursor-pointer bg-purple-50 hover:bg-purple-100 p-4 rounded-xl transition-all border border-purple-200 hover:border-purple-400 hover:shadow-md group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">4</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-purple-900 mb-1">临界质量</h4>
+                                    <p class="text-xs text-gray-600">网络效应 · 自持增长</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-violet-50 to-purple-50 p-5 rounded-2xl border border-violet-200">
+                        <h4 class="font-bold text-violet-900 text-sm mb-3 uppercase tracking-wide">理论洞察</h4>
+                        <div id="theory-insight-box" class="text-gray-700 text-sm leading-relaxed min-h-[100px]">
+                            点击左侧理论卡片，查看详细分析和社区产品应用案例。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Visualization -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Diffusion Curve Chart -->
+                    <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl border border-violet-200 p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <span>📊</span> 创新扩散曲线
+                        </h4>
+                        <div class="bg-white rounded-xl p-4">
+                            <div class="relative h-64">
+                                <canvas id="diffusionCurveChart"></canvas>
+                            </div>
+                            <div class="mt-4 grid grid-cols-5 gap-2 text-xs text-center">
+                                <div class="p-2 bg-violet-50 rounded-lg">
+                                    <div class="font-bold text-violet-700">创新者</div>
+                                    <div class="text-gray-600">2.5%</div>
+                                </div>
+                                <div class="p-2 bg-purple-50 rounded-lg">
+                                    <div class="font-bold text-purple-700">早期采用者</div>
+                                    <div class="text-gray-600">13.5%</div>
+                                </div>
+                                <div class="p-2 bg-indigo-50 rounded-lg">
+                                    <div class="font-bold text-indigo-700">早期多数</div>
+                                    <div class="text-gray-600">34%</div>
+                                </div>
+                                <div class="p-2 bg-blue-50 rounded-lg">
+                                    <div class="font-bold text-blue-700">晚期多数</div>
+                                    <div class="text-gray-600">34%</div>
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded-lg">
+                                    <div class="font-bold text-gray-700">落后者</div>
+                                    <div class="text-gray-600">16%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theory Comparison Cards -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-violet-500 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl">📈</span>
+                                <h5 class="font-bold text-violet-900">扩散阶段</h5>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-3">不同阶段的传播特点</p>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                                    <span>创新者：技术极客</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span>早期采用者：意见领袖</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                                    <span>早期多数：主流用户</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-purple-500 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl">🦠</span>
+                                <h5 class="font-bold text-purple-900">病毒式传播</h5>
+                            </div>
+                            <p class="text-xs text-gray-600 mb-3">K值模型</p>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span>K>1：加速传播</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span>K<1：衰减传播</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    <span>设计分享机制</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Principles -->
+        <section class="bg-gradient-to-br from-violet-900 to-purple-900 rounded-3xl shadow-xl p-8 md:p-10 mb-12 text-white">
+            <h3 class="text-2xl md:text-3xl font-bold mb-8 text-center serif">核心原则</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🎯</div>
+                    <h4 class="font-bold text-lg mb-2">服务早期采用者</h4>
+                    <p class="text-sm text-violet-100 leading-relaxed">重点服务早期采用者（意见领袖），通过他们带动早期多数，形成传播雪球效应。</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🦠</div>
+                    <h4 class="font-bold text-lg mb-2">设计分享机制</h4>
+                    <p class="text-sm text-violet-100 leading-relaxed">设计"值得分享"的内容和机制（如"@好友"、"邀请有礼"），提升K值，实现病毒式增长。</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                    <div class="text-3xl mb-4">🔓</div>
+                    <h4 class="font-bold text-lg mb-2">避免信息茧房</h4>
+                    <p class="text-sm text-violet-100 leading-relaxed">在个性化推荐中引入随机性（如"探索"频道），避免过度过滤，保持信息多样性。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关产品推荐 -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-violet-50 to-purple-50 rounded-3xl shadow-lg border border-violet-100 p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center flex items-center justify-center gap-2">
+                    <span>📡</span> 相关产品推荐
+                </h3>
+                <p class="text-sm text-gray-600 text-center mb-6 leading-relaxed">
+                    <span class="font-semibold text-gray-700">理论实践：</span>以下产品在设计与运营中应用了本页面的<span class="text-violet-600 font-medium">信息传播理论、扩散曲线、病毒式传播</span>等理论框架。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">抖音</h4>
+                        <p class="text-xs text-gray-600 mb-3">算法推荐实现内容快速扩散</p>
+                        <div class="text-xs text-violet-600 font-medium">扩散曲线 + 信息茧房</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">微信</h4>
+                        <p class="text-xs text-gray-600 mb-3">分享机制实现病毒式传播</p>
+                        <div class="text-xs text-violet-600 font-medium">病毒式传播 + K值模型</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">Reddit</h4>
+                        <p class="text-xs text-gray-600 mb-3">投票机制达到临界质量</p>
+                        <div class="text-xs text-violet-600 font-medium">临界质量 + 网络效应</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition cursor-pointer">
+                        <h4 class="font-bold text-gray-800 mb-2">Twitter</h4>
+                        <p class="text-xs text-gray-600 mb-3">转发机制实现信息快速扩散</p>
+                        <div class="text-xs text-violet-600 font-medium">病毒式传播 + 扩散曲线</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 大道至简 -->
+        <section class="simplicity-box bg-gradient-to-br from-violet-900 to-purple-900">
+            <span class="quote-mark text-violet-500">"</span>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <div class="inline-block px-4 py-1 border border-violet-500 rounded-full text-violet-300 text-xs tracking-wider mb-6 uppercase">大道至简 · Information Diffusion</div>
+                <h2 class="text-2xl md:text-4xl font-bold mb-8 serif italic leading-tight">
+                    "信息传播不是线性的，而是遵循扩散曲线，<br>从创新者到早期采用者，再到主流大众。"
+                </h2>
+                <p class="text-sm md:text-base text-violet-100 opacity-80 mb-8 font-serif">— 埃弗雷特·罗杰斯 (Everett Rogers)</p>
+                <div class="h-px w-24 bg-violet-500 mx-auto mb-8 opacity-50"></div>
+                <p class="text-lg md:text-xl font-light text-gray-100">
+                    社区的本质是<span class="font-bold text-violet-400">信息流动</span>，需要理解<span class="font-bold text-purple-400">扩散机制</span>与<span class="font-bold text-pink-400">传播规律</span>。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Render Wisdom Capsules
+        function renderWisdomCapsules() {
+            const container = document.getElementById('wisdom-diffusion');
+            if (!container || !window.wisdomCapsules || !wisdomCapsules.diffusion) return;
+            
+            const capsules = wisdomCapsules.diffusion;
+            let html = '<div class="grid md:grid-cols-3 gap-4">';
+            
+            capsules.forEach((capsule) => {
+                const borderColor = capsule.type === 'pattern' ? 'border-green-500' : 
+                                   capsule.type === 'anti-pattern' ? 'border-red-500' : 'border-blue-500';
+                const typeBadge = capsule.type === 'pattern' ? '✅ 模式' : 
+                                 capsule.type === 'anti-pattern' ? '❌ 反模式' : '💡 洞察';
+                html += `
+                    <div class="wisdom-capsule ${borderColor}">
+                        <div class="type-badge bg-gray-100 text-gray-700">${typeBadge}</div>
+                        <h4>${capsule.title}</h4>
+                        <p>${capsule.content}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Show Theory Insight
+        function showTheoryInsight(type) {
+            const box = document.getElementById('theory-insight-box');
+            const insights = {
+                'diffusion-curve': '创新扩散曲线描述了信息从创新者到落后者的传播过程。创新者（2.5%）和早期采用者（13.5%）是关键的意见领袖，他们能够带动早期多数（34%）的采用，从而形成传播雪球效应。社区产品应该重点服务这些早期采用者，通过他们扩大影响力。',
+                'viral-spread': '病毒式传播的关键是K值（每个用户平均带来多少新用户）。当K值>1时，传播加速；当K值<1时，传播衰减。设计"值得分享"的内容和机制（如"@好友"、"邀请有礼"）可以提升K值，实现病毒式增长。',
+                'information-cocoon': '信息茧房是指算法推荐导致用户只看到相似信息，形成"信息茧房"。短期提升参与度，长期降低社区多样性。在个性化推荐中引入随机性（如"探索"频道）可以避免过度过滤，保持信息多样性。',
+                'critical-mass': '社区需要达到临界质量才能自持增长。在达到临界点之前，需要主动运营；达到之后，可以依赖网络效应。初期集中资源打造"核心社区"，快速达到临界质量，然后扩张到更大范围。'
+            };
+            if (box && insights[type]) {
+                box.innerHTML = insights[type];
+            }
+        }
+
+        // Initialize Diffusion Curve Chart
+        function initDiffusionChart() {
+            const ctx = document.getElementById('diffusionCurveChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                    datasets: [{
+                        label: '采用率',
+                        data: [2.5, 8, 18, 35, 52, 68, 80, 88, 94, 97, 100],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '累计采用率 (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '时间阶段'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderWisdomCapsules();
+            initDiffusionChart();
+        });
+    </script>
+</body>
+</html>
