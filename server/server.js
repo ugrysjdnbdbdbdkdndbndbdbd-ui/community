@@ -130,14 +130,20 @@ function initDatabase() {
 
 // ==================== 数据采集API ====================
 
-// 初始化数据采集器
+const { DataScraper } = require('./scraper');
 const scraper = new DataScraper();
 
 // ==================== API路由 ====================
 
 // 健康检查
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    const pkg = require('./package.json');
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        version: pkg.version || '1.0.0',
+        buildTime: process.env.BUILD_TIME || null
+    });
 });
 
 // 获取所有案例

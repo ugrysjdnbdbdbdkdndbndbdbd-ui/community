@@ -1,0 +1,10 @@
+{
+  "name": "community-cases-backend",
+  "desc": "社区产品案例库后端服务 - 数据采集与云端同步",
+  "tags": [
+    "Node.js"
+  ],
+  "startCmd": "npm run dev",
+  "port": "8080",
+  "status": "开发中"
+}

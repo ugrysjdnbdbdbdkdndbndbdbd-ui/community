@@ -6,52 +6,79 @@
     <title>案例库数据管理后台 - 社区产品推导系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- SQL.js 加载 - 使用异步加载和多个备用源 -->
+    <!-- SQL.js 加载 - 使用 initSqlJs + locateFile 正确加载 wasm，多 CDN 备用 -->
     <script>
-        // SQL.js 加载器 - 支持多个CDN备用源
         (function() {
             const sqljsSources = [
                 'https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/sql-wasm.js',
                 'https://unpkg.com/sql.js@1.8.0/dist/sql-wasm.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js'
             ];
-            
+            const wasmBaseUrls = [
+                'https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/',
+                'https://unpkg.com/sql.js@1.8.0/dist/',
+                'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/'
+            ];
             let currentSourceIndex = 0;
             let loadAttempts = 0;
             const maxAttempts = sqljsSources.length;
-            
-            function loadSQLJS() {
-                if (typeof SQL !== 'undefined') {
-                    console.log('SQL.js已加载');
-                    return;
-                }
-                
+
+            function onSQLReady() {
+                console.log('SQL.js 已就绪');
+            }
+
+            function tryNextSource() {
+                currentSourceIndex++;
+                loadAttempts++;
                 if (loadAttempts >= maxAttempts) {
-                    console.error('所有SQL.js CDN源都加载失败，将使用localStorage备用方案');
-                    // 设置标志，使用localStorage备用方案
+                    console.error('所有 SQL.js CDN 源都加载失败，将使用 localStorage 备用方案');
                     window.SQLJS_LOAD_FAILED = true;
                     return;
                 }
-                
-                const script = document.createElement('script');
+                loadSQLJS();
+            }
+
+            function loadSQLJS() {
+                if (typeof SQL !== 'undefined' && typeof SQL.Database !== 'undefined') {
+                    onSQLReady();
+                    return;
+                }
+                if (loadAttempts >= maxAttempts) {
+                    window.SQLJS_LOAD_FAILED = true;
+                    return;
+                }
+
+                var script = document.createElement('script');
                 script.src = sqljsSources[currentSourceIndex];
-                script.async = true;
-                
+                script.async = false;
+
                 script.onload = function() {
-                    console.log(`SQL.js从源 ${currentSourceIndex + 1} 加载成功`);
+                    var baseUrl = wasmBaseUrls[currentSourceIndex] || sqljsSources[currentSourceIndex].replace(/\/[^/]+$/, '/');
+                    if (typeof initSqlJs !== 'undefined') {
+                        initSqlJs({ locateFile: function(file) { return baseUrl + file; } })
+                            .then(function(SQL) {
+                                window.SQL = SQL;
+                                onSQLReady();
+                            })
+                            .catch(function(err) {
+                                console.warn('SQL.js initSqlJs 失败，尝试下一源:', err);
+                                tryNextSource();
+                            });
+                    } else if (typeof SQL !== 'undefined' && typeof SQL.Database !== 'undefined') {
+                        onSQLReady();
+                    } else {
+                        tryNextSource();
+                    }
                 };
-                
+
                 script.onerror = function() {
-                    console.warn(`SQL.js源 ${currentSourceIndex + 1} 加载失败，尝试下一个源...`);
-                    currentSourceIndex++;
-                    loadAttempts++;
-                    loadSQLJS();
+                    console.warn('SQL.js 脚本加载失败，尝试下一源');
+                    tryNextSource();
                 };
-                
+
                 document.head.appendChild(script);
             }
-            
-            // 页面加载时开始加载SQL.js
+
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', loadSQLJS);
             } else {
@@ -63,6 +90,8 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- 加载community_cases.js（如果存在） -->
     <script src="community_cases.js" onerror="console.warn('community_cases.js未找到，部分功能可能不可用')"></script>
+    <!-- 多维度信息增密报告脚本 -->
+    <script src="scripts/info-density-report.js" onerror="console.warn('info-density-report.js未找到，信息增密功能将使用内置逻辑')"></script>
     <style>
         .sidebar-item.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -106,27 +135,42 @@
                 <h1 class="text-xl font-bold text-gray-800">数据管理后台</h1>
                 <p class="text-sm text-gray-500 mt-1">案例库管理系统</p>
             </div>
-            <nav class="flex-1 p-4 space-y-2">
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <!-- 首页：总览 -->
                 <a href="#" onclick="showSection('dashboard')" class="sidebar-item active block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
                     📊 数据概览
                 </a>
-                <a href="#" onclick="showSection('cases')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    📦 案例管理
-                </a>
-                <a href="#" onclick="showSection('collect')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    🔍 数据采集
+                <!-- 1. 数据准备：先有数据 -->
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-4">数据准备</p>
+                <a href="#" onclick="showSection('sync')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    🔄 数据同步
                 </a>
                 <a href="#" onclick="showSection('import')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
                     📥 数据导入
                 </a>
-                <a href="#" onclick="showSection('export')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    📤 数据导出
+                <!-- 2. 案例与采集 -->
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-4">案例与采集</p>
+                <a href="#" onclick="showSection('cases')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    📦 案例管理
                 </a>
-                <a href="#" onclick="showSection('sync')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    🔄 数据同步
+                <a href="#" onclick="showSection('icons')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    🖼️ 图标管理
                 </a>
+                <a href="#" onclick="showSection('collect')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    🔍 数据采集
+                </a>
+                <!-- 3. 质量与增密 -->
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-4">质量与增密</p>
                 <a href="#" onclick="showSection('quality')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
                     🔍 数据质量
+                </a>
+                <a href="#" onclick="showSection('info-density')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    📈 信息增密
+                </a>
+                <!-- 4. 输出与设置 -->
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2 px-4">输出与设置</p>
+                <a href="#" onclick="showSection('export')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    📤 数据导出
                 </a>
                 <a href="#" onclick="showSection('analytics')" class="sidebar-item block px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
                     📊 数据分析
@@ -238,6 +282,21 @@
                         </div>
                     </div>
                 </div>
+                <!-- 使用说明（简明） -->
+                <div class="mb-4 p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm text-gray-600">
+                    <p class="font-semibold text-gray-700 mb-2">📖 使用说明</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>推荐打开方式</strong>：在项目目录执行 <code class="bg-white px-1 rounded border">npx serve .</code>，浏览器访问 <code class="bg-white px-1 rounded border">http://localhost:3000/数据管理后台.html</code>，以加载 SQL.js 启用完整功能（编辑、同步、备份等）。</li>
+                        <li><strong>仅用 file 打开</strong>：将使用本地存储模式，可查看、导出数据；编辑与同步需通过上述 HTTP 方式打开。</li>
+                        <li>数据来源：<code class="bg-white px-1 rounded border">community_cases.js</code> 为案例主数据；本后台可同步、编辑并导出，与「社区推导看板」通过 localStorage 联动。</li>
+                    </ul>
+                </div>
+                <!-- 推荐操作动线 -->
+                <div class="mb-6 p-4 bg-indigo-50 rounded-xl border border-indigo-200 text-sm text-indigo-800">
+                    <p class="font-semibold text-indigo-900 mb-2">📍 推荐操作顺序</p>
+                    <p class="mb-1">按左侧导航从上到下操作：<strong>数据同步</strong>（或数据导入）→ <strong>案例管理</strong> / <strong>数据采集</strong> → <strong>数据质量</strong> / <strong>信息增密</strong>（可再按建议采集）→ <strong>数据导出</strong>。</p>
+                    <p class="text-indigo-700 text-xs">建议先完成「数据同步」再采集；信息增密报告可指导「按建议采集」补全缺失项。</p>
+                </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -264,6 +323,9 @@
 
             <!-- Cases Management Section -->
             <div id="section-cases" class="section-content hidden p-8">
+                <div id="cases-db-notice" class="hidden mb-4 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+                    <strong>仅读模式：</strong>数据库未初始化，当前仅支持查看与导出；编辑、删除需先使用 HTTP 服务器打开本页（如 <code class="bg-amber-100 px-1 rounded">npx serve .</code>）以加载 SQL.js，或点击「数据同步」同步硬编码数据以初始化数据库。
+                </div>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-bold text-gray-800">案例列表</h3>
@@ -324,11 +386,16 @@
                                         <input type="checkbox" id="select-all" onchange="toggleSelectAll()" 
                                                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     </th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-16">图标</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">案例标识</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">名称</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">分类</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">分类/标签</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">状态</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">5D</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">三块</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">数据完整度</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase" title="预留：二期质量模块接入后显示">质量</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">网站</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">最后更新</th>
                                     <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">操作</th>
                                 </tr>
@@ -338,14 +405,70 @@
                             </tbody>
                         </table>
                     </div>
-                    <div id="cases-pagination" class="mt-4 flex items-center justify-between">
-                        <div class="text-sm text-gray-600">
+                    <div id="cases-pagination" class="mt-4 flex items-center justify-between flex-wrap gap-2">
+                        <div class="text-sm text-gray-600 flex items-center gap-2">
                             显示 <span id="cases-start">0</span>-<span id="cases-end">0</span> 条，共 <span id="cases-total">0</span> 条
+                            <span class="text-gray-400">|</span>
+                            每页
+                            <select id="cases-page-size" onchange="changePageSize(this.value)" class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                <option value="20" selected>20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            条
                         </div>
                         <div class="flex gap-2">
                             <button onclick="previousPage()" class="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50" id="prev-btn">上一页</button>
                             <span class="px-3 py-1 text-sm text-gray-700" id="current-page">1</span>
                             <button onclick="nextPage()" class="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50" id="next-btn">下一页</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Icons Management Section -->
+            <div id="section-icons" class="section-content hidden p-8">
+                <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
+                    <p class="text-sm text-indigo-800">与<strong>案例管理</strong>结合：为每个案例配置在主看板与列表中展示的图标。可使用<strong>本地 icons 文件夹</strong>中的图片、Emoji 或图片 URL。配置保存在本地（localStorage），主看板将优先使用此处设置。</p>
+                </div>
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        <input type="text" id="icons-search" placeholder="搜索案例 key 或名称…" class="px-4 py-2 border border-gray-300 rounded-lg w-64 text-sm" oninput="filterIconsTable()">
+                        <span class="text-sm text-gray-500" id="icons-stats">0 个案例，0 个已配置图标</span>
+                        <span class="text-sm text-gray-400" id="local-icons-count"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="batchMatchLocalIcons()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">批量用本地图标匹配</button>
+                        <button type="button" onclick="exportCaseIcons()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">导出图标配置</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto border border-gray-200 rounded-xl">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">图标</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">案例 key</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">名称</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">当前配置</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="icons-table-body">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-4 text-xs text-gray-500">提示：<strong>本地图标</strong>从项目 <code class="bg-gray-100 px-1 rounded">icons/</code> 文件夹选择，保存为相对路径 <code class="bg-gray-100 px-1 rounded">icons/文件名</code>；Emoji 为单个字符；图片 URL 需以 http(s) 或 data: 开头。主看板与案例列表会同步显示。</p>
+                <!-- 本地图标选择弹窗 -->
+                <div id="local-icon-picker-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" style="display: none;" onclick="if(event.target===this) closeLocalIconPicker()">
+                    <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+                        <div class="p-4 border-b flex justify-between items-center">
+                            <h3 class="font-bold text-gray-800">从本地 icons 选择</h3>
+                            <button type="button" onclick="closeLocalIconPicker()" class="text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+                        </div>
+                        <input type="text" id="local-icon-picker-search" placeholder="搜索图标文件名…" class="mx-4 mt-2 px-3 py-2 border rounded-lg text-sm" oninput="filterLocalIconPicker()">
+                        <div id="local-icon-picker-grid" class="p-4 overflow-y-auto flex-1 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2">
+                            <!-- 动态填充 -->
                         </div>
                     </div>
                 </div>
@@ -384,10 +507,22 @@
                                 </div>
                                 <p class="text-sm text-gray-500">采集ARPU、LTV、收入等</p>
                             </div>
+                            <div class="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-indigo-800">📥 按信息增密建议采集</span>
+                                    <button onclick="collectSuggestedByReport()" class="px-3 py-1 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                                        开始采集
+                                    </button>
+                                </div>
+                                <p class="text-sm text-indigo-700">仅对「信息增密」报告中缺失 user_metrics / business_model 的案例执行用户+商业数据采集。需先到「信息增密」页运行报告。</p>
+                            </div>
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">采集日志</h3>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">采集日志</h3>
+                            <button type="button" onclick="clearCollectionLog()" class="px-3 py-1 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">清空日志</button>
+                        </div>
                         <div id="collection-log" class="space-y-2 max-h-96 overflow-y-auto">
                             <!-- 动态生成 -->
                         </div>
@@ -604,6 +739,91 @@
                                 <p>点击"开始检查"按钮进行数据质量检查</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 信息增密：多维度信息获取与自助更新 -->
+            <div id="section-info-density" class="section-content hidden p-8">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">多维度信息增密</h3>
+                            <p class="text-sm text-gray-500 mt-1">实效性检查、信息增密报告、核心案例增密，支持自助式更新与导出</p>
+                        </div>
+                        <button onclick="runAllInfoDensityReports()" class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition flex items-center gap-2 shadow-md">
+                            <span>🚀</span> 一键运行全部
+                        </button>
+                    </div>
+
+                    <!-- 维度卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-lg font-semibold text-gray-800">⏱ 实效性</span>
+                                <button onclick="runTimelinessReport()" class="px-3 py-1.5 bg-amber-100 text-amber-800 text-sm rounded-lg hover:bg-amber-200 transition">运行</button>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-2">基于 timeline 最后年份判断数据是否过时，识别需更新案例</p>
+                            <div id="info-density-timeliness-summary" class="text-xs text-gray-600">未运行</div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-lg font-semibold text-gray-800">📊 信息增密</span>
+                                <button onclick="runDensityReport()" class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-lg hover:bg-blue-200 transition">运行</button>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-2">检查 user_metrics / business_model / key_metrics 完整度，输出缺失项</p>
+                            <div id="info-density-density-summary" class="text-xs text-gray-600">未运行</div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-lg font-semibold text-gray-800">⭐ 核心案例</span>
+                                <button onclick="runCoreDensityReport()" class="px-3 py-1.5 bg-green-100 text-green-800 text-sm rounded-lg hover:bg-green-200 transition">运行</button>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-2">核心案例是否具备完整三块指标，优先增密清单</p>
+                            <div id="info-density-core-summary" class="text-xs text-gray-600">未运行</div>
+                        </div>
+                    </div>
+
+                    <!-- 报告结果区域 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-bold text-gray-800">报告结果</h4>
+                            <div class="flex items-center gap-2">
+                                <select id="info-density-report-type" onchange="switchInfoDensityReportView()" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm">
+                                    <option value="timeliness">实效性</option>
+                                    <option value="density">信息增密</option>
+                                    <option value="core">核心案例增密</option>
+                                </select>
+                                <button onclick="exportInfoDensityReport()" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm transition">导出 CSV</button>
+                                <button onclick="exportInfoDensityReportJSON()" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm transition">导出 JSON</button>
+                            </div>
+                        </div>
+                        <div id="info-density-report-table-wrap" class="overflow-x-auto max-h-96 overflow-y-auto">
+                            <p class="text-gray-500 text-center py-8">请在上方点击「运行」或「一键运行全部」生成报告</p>
+                        </div>
+                        <!-- 根据报告建议执行数据采集（O2 增密联动） -->
+                        <div class="mt-4 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                            <p class="text-sm font-semibold text-indigo-800 mb-2">📥 根据报告建议进行数据采集</p>
+                            <p class="text-xs text-indigo-700 mb-3">对「信息增密」或「核心案例增密」报告中缺失 user_metrics / business_model 的案例，执行用户数据与商业数据采集（API + 本地回退）。</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="collectSuggestedByReport()" class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition">
+                                    对建议案例执行采集
+                                </button>
+                                <span id="info-density-collect-hint" class="text-xs text-indigo-600 self-center">请先运行上方「信息增密」或「核心案例增密」报告</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作说明 -->
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 p-4 text-sm text-gray-600">
+                        <p class="font-semibold text-gray-700 mb-2">使用说明</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>实效性</strong>：依据案例 timeline 最后年份与当前年份差，标记 fresh / normal / stale，便于优先更新过期案例。</li>
+                            <li><strong>信息增密</strong>：对每条案例检查是否具备 user_metrics、business_model、key_metrics 及关键子字段，生成密度分与缺失项清单。</li>
+                            <li><strong>核心案例增密</strong>：针对预定义核心案例列表检查完整度，导出待增密优先级列表。</li>
+                            <li><strong>根据建议采集</strong>：运行报告后，可点击「对建议案例执行采集」对缺失 user_metrics / business_model 的案例执行用户数据与商业数据采集（会跳转到数据采集页并写采集日志）。</li>
+                            <li>导出 CSV/JSON 后可配合线下编辑或脚本批量补数，再通过「数据同步」或直接编辑 community_cases.js 回写。</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -846,6 +1066,27 @@
     </div>
 
     <script>
+        // 采集 API 基地址（可在此或页面加载前覆盖，如 window.CASES_API_BASE = 'http://localhost:3000'）
+        window.CASES_API_BASE = window.CASES_API_BASE || (window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin);
+        function getCasesApiBase() { return window.CASES_API_BASE || 'http://localhost:3000'; }
+        async function checkCollectApiAvailable() {
+            try {
+                var r = await fetch(getCasesApiBase() + '/api/health', { signal: AbortSignal.timeout(3000) });
+                return r.ok;
+            } catch (e) {
+                console.warn('采集API不可达:', e);
+                return false;
+            }
+        }
+        // 友好错误文案（详情仍输出到控制台）
+        function friendlyErrorMessage(e, context) {
+            var msg = (e && e.message) ? e.message : String(e);
+            if (/fetch|network|Failed to fetch/i.test(msg)) return '网络异常，请检查后端服务是否启动（如 cd server && node server.js）';
+            if (/timeout|abort/i.test(msg)) return '请求超时，请检查网络或后端服务';
+            if (/database|sql/i.test(msg)) return '数据库操作失败，请刷新重试';
+            return context ? context + '：' + msg : msg;
+        }
+
         // 全局状态
         let db = null;
         let currentSection = 'dashboard';
@@ -972,33 +1213,25 @@
                 }
             }
             
-            // 显示提示信息（只显示一次）
+            // 显示提示信息（只显示一次），并附带使用说明
             if (!document.getElementById('localstorage-notice')) {
-                const notice = document.createElement('div');
+                var notice = document.createElement('div');
                 notice.id = 'localstorage-notice';
-                notice.className = 'fixed top-4 right-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded shadow-lg z-50 max-w-md';
-                notice.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium">使用本地存储模式</p>
-                            <p class="mt-1 text-sm">SQL.js加载失败，已切换到localStorage模式。部分高级功能可能受限。</p>
-                            <button onclick="this.closest('.fixed').remove()" class="mt-2 text-xs underline">知道了</button>
-                        </div>
-                    </div>
-                `;
+                notice.className = 'fixed top-4 right-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg shadow-lg z-50 max-w-md';
+                notice.innerHTML = '<div class="flex items-start">' +
+                    '<div class="flex-shrink-0"><svg class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">' +
+                    '<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>' +
+                    '</svg></div>' +
+                    '<div class="ml-3 flex-1">' +
+                    '<p class="text-sm font-semibold">使用本地存储模式</p>' +
+                    '<p class="mt-1 text-sm">SQL.js 未加载，已切换到 localStorage。当前可：<strong>查看、导出</strong>数据；<strong>编辑、同步、备份</strong>需启用完整模式。</p>' +
+                    '<p class="mt-2 text-xs text-amber-700">启用完整模式：在项目目录运行 <code class="bg-amber-100 px-1 rounded">npx serve .</code>，然后访问 <code class="bg-amber-100 px-1 rounded">http://localhost:3000/数据管理后台.html</code>。</p>' +
+                    '<button type="button" onclick="this.closest(\'.fixed\').remove()" class="mt-2 text-xs font-medium underline hover:no-underline">知道了</button>' +
+                    '</div></div>';
                 document.body.appendChild(notice);
-                
-                // 5秒后自动隐藏
-                setTimeout(() => {
-                    if (notice.parentNode) {
-                        notice.remove();
-                    }
-                }, 5000);
+                setTimeout(function() {
+                    if (notice.parentNode) notice.remove();
+                }, 8000);
             }
         }
 
@@ -1150,21 +1383,18 @@
             } catch (e) { console.warn('exportCasesToMainBoard:', e); }
         }
 
-        // 加载数据
+        // 加载数据（案例列表始终加载，以展示目前所有案例；仪表盘与图表依赖 DB 时再更新）
         function loadData() {
+            loadDashboardStats();
+            loadCasesTable();
             if (db) {
-                loadDashboardStats();
-                loadCasesTable();
                 loadRecentUpdates();
-                // 更新图表数据
                 updateCharts();
                 exportCasesToMainBoard(false);
-                // 如果在质量检查页面，刷新质量检查
                 if (currentSection === 'quality' && qualityIssues.length > 0) {
                     runQualityCheck();
                 }
             } else {
-                // 使用localStorage后备
                 loadDataFromLocalStorage();
                 if (window.USE_LOCALSTORAGE_FALLBACK) exportCasesToMainBoard(true);
             }
@@ -1177,12 +1407,27 @@
             }
         }
 
-        // 加载仪表板统计
+        // 加载仪表板统计（总案例数以 communityCases 与 DB 并集为准；localStorage 模式下用 casesData 估算）
         function loadDashboardStats() {
             try {
-                const totalCases = db.exec("SELECT COUNT(*) as count FROM cases_basic")[0]?.values[0]?.[0] || 0;
-                const collected = db.exec("SELECT COUNT(*) as count FROM cases_5d_scores")[0]?.values[0]?.[0] || 0;
-                
+                let totalCases = 0;
+                let collected = 0;
+                if (db) {
+                    totalCases = db.exec("SELECT COUNT(*) as count FROM cases_basic")[0]?.values[0]?.[0] || 0;
+                    collected = db.exec("SELECT COUNT(*) as count FROM cases_5d_scores")[0]?.values[0]?.[0] || 0;
+                }
+                if (typeof communityCases !== 'undefined' && communityCases && Object.keys(communityCases).length > 0) {
+                    totalCases = Math.max(totalCases, Object.keys(communityCases).length);
+                }
+                if (window.USE_LOCALSTORAGE_FALLBACK && window.casesData) {
+                    const keys = Object.keys(window.casesData);
+                    totalCases = Math.max(totalCases, keys.length);
+                    collected = keys.filter(function(k) {
+                        var c = window.casesData[k];
+                        return c && c.scores && c.scores.length >= 5;
+                    }).length;
+                }
+
                 document.getElementById('stat-total-cases').textContent = totalCases;
                 document.getElementById('stat-collected').textContent = collected;
                 document.getElementById('stat-pending').textContent = totalCases - collected;
@@ -1193,113 +1438,465 @@
         }
 
         // 全局状态
-        let allCasesData = []; // 存储所有案例数据
-        let filteredCasesData = []; // 过滤后的案例数据
-        let currentPage = 1;
-        const itemsPerPage = 20;
-        let selectedCases = new Set(); // 选中的案例key
+        var allCasesData = []; // 存储所有案例数据
+        var filteredCasesData = []; // 过滤后的案例数据
+        var currentPage = 1;
+        var itemsPerPage = 20; // 每页条数，可由用户选择 20/50/100
+        var selectedCases = new Set(); // 选中的案例key
 
-        // 加载案例表格
+        // 加载案例表格：优先展示 communityCases 全部案例，并合并 DB 与完整度信息
         function loadCasesTable() {
+            var tbody = document.getElementById('cases-table-body');
+            var colspan = 13;
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="' + colspan + '" class="px-4 py-8 text-center text-gray-500">加载中...</td></tr>';
+            }
             try {
-                const result = db.exec("SELECT * FROM cases_basic ORDER BY updated_at DESC");
-                
-                if (result.length > 0) {
-                    allCasesData = result[0].values.map(row => {
-                        const [key, title, subtitle, category, launch_date, status, website, created_at, updated_at] = row;
-                        
-                        // 计算数据完整度
-                        let completeness = 0;
-                        try {
-                            const d5 = db.exec("SELECT * FROM cases_5d_scores WHERE case_key = ?", [key]);
-                            const user = db.exec("SELECT * FROM cases_user_data WHERE case_key = ?", [key]);
-                            const business = db.exec("SELECT * FROM cases_business_data WHERE case_key = ?", [key]);
-                            
-                            if (d5.length > 0 && d5[0].values.length > 0) completeness += 40;
-                            if (user.length > 0 && user[0].values.length > 0) completeness += 30;
-                            if (business.length > 0 && business[0].values.length > 0) completeness += 30;
-                        } catch (e) {
-                            // 忽略查询错误
-                        }
-                        
+                // 1) 以 communityCases 为全量数据源（展示目前所有案例）
+                var fromJs = typeof communityCases !== 'undefined' && communityCases && Object.keys(communityCases).length > 0
+                    ? Object.keys(communityCases).map(function(key) {
+                        var c = communityCases[key];
+                        if (!c || typeof c !== 'object') return null;
+                        var hasScores = c.scores && c.scores.length >= 5;
+                        var hasUser = !!(c.user_metrics && typeof c.user_metrics === 'object');
+                        var hasBiz = !!(c.business_model && typeof c.business_model === 'object');
+                        var hasKey = !!(c.key_metrics && typeof c.key_metrics === 'object');
+                        var completeness = 0;
+                        if (hasScores) completeness += 40;
+                        if (hasUser) completeness += 30;
+                        if (hasBiz) completeness += 15;
+                        if (hasKey) completeness += 15;
+                        var tags = (c.tags || []);
+                        var category = (tags[0] || '').replace(/^#/, '') || '其他';
                         return {
-                            key, title, subtitle, category, launch_date, status, website,
-                            created_at, updated_at, completeness,
-                            row: [key, title, subtitle, category, launch_date, status, website, created_at, updated_at]
+                            key: key,
+                            title: c.title || key,
+                            subtitle: c.subtitle || '',
+                            category: category,
+                            tags: tags.slice(0, 3).join(' '),
+                            launch_date: (c.timeline && c.timeline[0]) ? c.timeline[0].year : '',
+                            status: 'active',
+                            website: c.website || '',
+                            created_at: null,
+                            updated_at: null,
+                            completeness: completeness,
+                            hasScores: hasScores,
+                            hasUser: hasUser,
+                            hasBiz: hasBiz,
+                            hasKey: hasKey,
+                            scores: (c.scores || []).slice(0, 5),
+                            source: 'js'
                         };
-                    });
-                    
-                    filteredCasesData = [...allCasesData];
-                    currentPage = 1;
-                    renderCasesTable();
-                    updatePagination();
-                } else {
-                    document.getElementById('cases-table-body').innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-gray-500">暂无数据</td></tr>';
+                    }).filter(Boolean)
+                    : [];
+                // localStorage 模式下若无 communityCases，用 casesData 展示已保存数据
+                if (fromJs.length === 0 && window.USE_LOCALSTORAGE_FALLBACK && window.casesData && Object.keys(window.casesData).length > 0) {
+                    fromJs = Object.keys(window.casesData).map(function(key) {
+                        var c = window.casesData[key];
+                        if (!c || typeof c !== 'object') return null;
+                        var hasScores = c.scores && c.scores.length >= 5;
+                        var hasUser = !!(c.user_metrics && typeof c.user_metrics === 'object');
+                        var hasBiz = !!(c.business_model && typeof c.business_model === 'object');
+                        var hasKey = !!(c.key_metrics && typeof c.key_metrics === 'object');
+                        var completeness = (hasScores ? 40 : 0) + (hasUser ? 30 : 0) + (hasBiz ? 15 : 0) + (hasKey ? 15 : 0);
+                        var tags = (c.tags || []);
+                        var category = (tags[0] || '').replace(/^#/, '') || '其他';
+                        return {
+                            key: key,
+                            title: c.title || key,
+                            subtitle: c.subtitle || '',
+                            category: category,
+                            tags: tags.slice(0, 3).join(' '),
+                            launch_date: '',
+                            status: 'active',
+                            website: c.website || '',
+                            created_at: null,
+                            updated_at: null,
+                            completeness: completeness,
+                            hasScores: hasScores,
+                            hasUser: hasUser,
+                            hasBiz: hasBiz,
+                            hasKey: hasKey,
+                            scores: (c.scores || []).slice(0, 5),
+                            source: 'js'
+                        };
+                    }).filter(Boolean);
                 }
+
+                // 2) 若存在 DB，合并 DB 中的字段（status, website, updated_at）并采用 DB 完整度
+                var merged = fromJs;
+                if (db) {
+                    try {
+                        const result = db.exec("SELECT case_key, title, subtitle, category, launch_date, status, website, created_at, updated_at FROM cases_basic");
+                        const dbRows = result.length > 0 ? result[0].values : [];
+                        const dbMap = {};
+                        dbRows.forEach(row => {
+                            const [key, title, subtitle, category, launch_date, status, website, created_at, updated_at] = row;
+                            dbMap[key] = { title, subtitle, category, launch_date, status, website, created_at, updated_at };
+                        });
+
+                        let completenessMap = {};
+                        dbRows.forEach(row => {
+                            const key = row[0];
+                            let comp = 0;
+                            try {
+                                const d5 = db.exec("SELECT 1 FROM cases_5d_scores WHERE case_key = ?", [key]);
+                                const user = db.exec("SELECT 1 FROM cases_user_data WHERE case_key = ?", [key]);
+                                const business = db.exec("SELECT 1 FROM cases_business_data WHERE case_key = ?", [key]);
+                                if (d5.length > 0 && d5[0].values.length > 0) comp += 40;
+                                if (user.length > 0 && user[0].values.length > 0) comp += 30;
+                                if (business.length > 0 && business[0].values.length > 0) comp += 30;
+                            } catch (e) {}
+                            completenessMap[key] = comp;
+                        });
+
+                        if (fromJs.length > 0) {
+                            merged = fromJs.map(item => {
+                                var dbComp = completenessMap[item.key] != null ? completenessMap[item.key] : 0;
+                                var jsComp = item.completeness != null ? item.completeness : 0;
+                                var realCompleteness = Math.max(dbComp, jsComp);
+                                const dbItem = dbMap[item.key];
+                                if (dbItem) {
+                                    return {
+                                        ...item,
+                                        title: dbItem.title ?? item.title,
+                                        subtitle: dbItem.subtitle ?? item.subtitle,
+                                        category: dbItem.category ?? item.category,
+                                        launch_date: dbItem.launch_date ?? item.launch_date,
+                                        status: dbItem.status ?? item.status,
+                                        website: dbItem.website ?? item.website,
+                                        created_at: dbItem.created_at,
+                                        updated_at: dbItem.updated_at,
+                                        completeness: realCompleteness,
+                                        source: 'sync'
+                                    };
+                                }
+                                return { ...item, completeness: realCompleteness };
+                            });
+                        } else {
+                            merged = dbRows.map(row => {
+                                const [key, title, subtitle, category, launch_date, status, website, created_at, updated_at] = row;
+                                return {
+                                    key, title: title || key, subtitle: subtitle || '', category: category || '-', tags: '',
+                                    launch_date, status, website, created_at, updated_at,
+                                    completeness: completenessMap[key] != null ? completenessMap[key] : 0,
+                                    hasScores: false, hasUser: false, hasBiz: false, hasKey: false, scores: [], source: 'db'
+                                };
+                            });
+                        }
+                    } catch (e) {
+                        console.warn('合并 DB 数据失败:', e);
+                    }
+                }
+
+                allCasesData = merged;
+                filteredCasesData = [...allCasesData];
+                currentPage = 1;
+                renderCasesTable();
+                updatePagination();
+
+                if (allCasesData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="' + colspan + '" class="px-4 py-8 text-center text-gray-500">暂无数据。请确保已加载 community_cases.js，或先执行「数据同步」同步硬编码数据。</td></tr>';
+                }
+                var noticeEl = document.getElementById('cases-db-notice');
+                if (noticeEl) noticeEl.classList.toggle('hidden', !!db);
             } catch (e) {
                 console.error('加载案例表格失败:', e);
-                document.getElementById('cases-table-body').innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-red-500">加载失败: ' + e.message + '</td></tr>';
+                allCasesData = [];
+                filteredCasesData = [];
+                if (tbody) tbody.innerHTML = '<tr><td colspan="' + colspan + '" class="px-4 py-8 text-center text-red-500">加载失败: ' + escapeHtml(friendlyErrorMessage(e)) + '</td></tr>';
+                updatePagination();
             }
         }
 
-        // 渲染案例表格
+        // 渲染案例表格（含 5D、三块、标签、网站等全部案例信息）
         function renderCasesTable() {
-                const tbody = document.getElementById('cases-table-body');
+            const tbody = document.getElementById('cases-table-body');
             if (!tbody) return;
-            
-                tbody.innerHTML = '';
 
+            tbody.innerHTML = '';
+            const colspan = 13;
             const start = (currentPage - 1) * itemsPerPage;
             const end = Math.min(start + itemsPerPage, filteredCasesData.length);
             const pageData = filteredCasesData.slice(start, end);
 
             if (pageData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-gray-500">没有匹配的数据</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="' + colspan + '" class="px-4 py-8 text-center text-gray-500">没有匹配的数据</td></tr>';
                 return;
             }
 
             pageData.forEach(caseData => {
-                const { key, title, subtitle, category, status, updated_at, completeness } = caseData;
-                        const tr = document.createElement('tr');
-                        tr.className = 'hover:bg-gray-50';
+                const { key, title, subtitle, category, tags, status, updated_at, completeness, hasScores, hasUser, hasBiz, hasKey, scores, website, source } = caseData;
+                const qualityStatus = caseData.qualityStatus != null ? caseData.qualityStatus : '-';
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50';
                 const isSelected = selectedCases.has(key);
                 const date = updated_at ? new Date(updated_at).toLocaleDateString() : '-';
-                
-                        tr.innerHTML = `
+                const scoreStr = (scores && scores.length >= 5) ? scores.slice(0, 5).join(',') : (hasScores ? '有' : '-');
+                const threeBlocks = [hasUser, hasBiz, hasKey].filter(Boolean).length;
+                const threeStr = threeBlocks === 3 ? '是' : (threeBlocks > 0 ? threeBlocks + '/3' : '否');
+                const websiteShort = (website && typeof website === 'string') ? (website.length > 28 ? website.slice(0, 25) + '…' : website) : '-';
+                const escapedKey = key.replace(/'/g, "\\'");
+
+                const iconMap = getCaseIconsFromStorage();
+                const iconVal = iconMap[key];
+                const iconCell = iconVal ? (iconVal.startsWith('http') || iconVal.startsWith('data:') || iconVal.startsWith('icons/'))
+                    ? '<img src="' + escapeHtml(iconVal) + '" alt="" class="w-8 h-8 object-contain rounded" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\'"><span style="display:none" class="text-xl">📦</span>'
+                    : '<span class="text-2xl">' + (iconVal || '📦') + '</span>'
+                    : '<span class="text-2xl">📦</span>';
+                tr.innerHTML = `
                     <td class="px-4 py-3">
                         <input type="checkbox" class="case-checkbox w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" 
-                               value="${key}" ${isSelected ? 'checked' : ''} onchange="toggleCaseSelection('${key}')">
+                               value="${escapedKey}" ${isSelected ? 'checked' : ''} onchange="toggleCaseSelection('${escapedKey}')">
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-900 font-mono">${key}</td>
+                    <td class="px-4 py-3 text-center" title="在「图标管理」中配置">${iconCell}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 font-mono">${escapeHtml(key)}</td>
                     <td class="px-4 py-3">
-                        <div class="text-sm font-medium text-gray-900">${title || '-'}</div>
-                        ${subtitle ? `<div class="text-xs text-gray-500">${subtitle}</div>` : ''}
+                        <div class="text-sm font-medium text-gray-900">${escapeHtml(title || '-')}</div>
+                        ${subtitle ? '<div class="text-xs text-gray-500">' + escapeHtml(subtitle) + '</div>' : ''}
                     </td>
-                            <td class="px-4 py-3 text-sm text-gray-500">${category || '-'}</td>
-                            <td class="px-4 py-3">
-                                <span class="status-badge status-${status || 'pending'}">${status || 'pending'}</span>
-                            </td>
-                            <td class="px-4 py-3">
+                    <td class="px-4 py-3 text-xs text-gray-600 max-w-[120px] truncate" title="${escapeHtml(tags || '')}">${escapeHtml(category || tags || '-')}</td>
+                    <td class="px-4 py-3">
+                        <span class="status-badge status-${status || 'pending'}">${status || 'pending'}</span>
+                    </td>
+                    <td class="px-4 py-3 text-xs font-mono text-gray-600" title="5D 评分">${escapeHtml(scoreStr)}</td>
+                    <td class="px-4 py-3 text-xs text-gray-600">${threeStr}</td>
+                    <td class="px-4 py-3">
                         <div class="flex items-center gap-2">
                             <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
                                 <div class="h-full ${completeness >= 80 ? 'bg-green-500' : completeness >= 50 ? 'bg-yellow-500' : 'bg-red-500'}" 
-                                     style="width: ${completeness}%"></div>
+                                     style="width: ${Math.min(100, completeness)}%"></div>
                             </div>
                             <span class="text-sm text-gray-600">${completeness}%</span>
                         </div>
                     </td>
+                    <td class="px-4 py-3 text-xs text-gray-500" title="预留：二期质量检查接入后显示">${escapeHtml(qualityStatus)}</td>
+                    <td class="px-4 py-3 text-xs text-gray-500 max-w-[140px] truncate" title="${escapeHtml(website || '')}">${escapeHtml(websiteShort)}</td>
                     <td class="px-4 py-3 text-sm text-gray-500">${date}</td>
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-2">
-                            <button onclick="editCase('${key}')" class="text-blue-500 hover:text-blue-700 text-sm" title="编辑">✏️</button>
-                            <button onclick="deleteCase('${key}')" class="text-red-500 hover:text-red-700 text-sm" title="删除">🗑️</button>
-                            <button onclick="viewCaseDetail('${key}')" class="text-gray-500 hover:text-gray-700 text-sm" title="查看详情">👁️</button>
+                            <button onclick="editCase('${escapedKey}')" class="text-blue-500 hover:text-blue-700 text-sm" title="编辑">✏️</button>
+                            <button onclick="deleteCase('${escapedKey}')" class="text-red-500 hover:text-red-700 text-sm" title="删除">🗑️</button>
+                            <button onclick="viewCaseDetail('${escapedKey}')" class="text-gray-500 hover:text-gray-700 text-sm" title="查看详情">👁️</button>
                         </div>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function escapeHtml(str) {
+            if (str == null) return '';
+            const s = String(str);
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        const CASE_ICONS_STORAGE_KEY = 'akashic_case_icons';
+        function getCaseIconsFromStorage() {
+            try {
+                const raw = localStorage.getItem(CASE_ICONS_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) { return {}; }
+        }
+        function saveCaseIconsToStorage(map) {
+            try {
+                localStorage.setItem(CASE_ICONS_STORAGE_KEY, JSON.stringify(map));
+                if (typeof renderCasesTable === 'function') renderCasesTable();
+            } catch (e) { console.warn('保存图标配置失败', e); }
+        }
+
+        var allIconsList = [];
+        var filteredIconsList = [];
+        var localIconsList = [];
+        var currentIconPickerKey = null;
+
+        function loadLocalIconsList(cb) {
+            fetch('icons/list.json').then(function(r) { return r.json(); }).then(function(arr) {
+                localIconsList = Array.isArray(arr) ? arr : [];
+                var el = document.getElementById('local-icons-count');
+                if (el) el.textContent = localIconsList.length ? '本地 icons: ' + localIconsList.length + ' 个' : '';
+                if (typeof cb === 'function') cb();
+            }).catch(function() {
+                localIconsList = [];
+                var el = document.getElementById('local-icons-count');
+                if (el) el.textContent = '未加载到 icons/list.json（请从项目根目录打开页面）';
+                if (typeof cb === 'function') cb();
+            });
+        }
+
+        function loadIconsTable() {
+            loadLocalIconsList(function() {
+                var list = [];
+                var cases = (typeof communityCases !== 'undefined' && communityCases) ? communityCases : {};
+                Object.keys(cases).forEach(function(key) {
+                    var c = cases[key];
+                    list.push({ key: key, title: (c && c.title) ? c.title : key, subtitle: (c && c.subtitle) ? c.subtitle : '' });
+                });
+                allIconsList = list;
+                filteredIconsList = list.slice();
+                filterIconsTable();
+            });
+        }
+
+        function normalizeForMatch(str) {
+            return (str || '').toLowerCase().replace(/\s+/g, '_').replace(/\+/g, '_').replace(/-/g, '_').replace(/\./g, '_').replace(/\s/g, '');
+        }
+
+        function batchMatchLocalIcons() {
+            if (!localIconsList.length) {
+                loadLocalIconsList(function() {
+                    if (localIconsList.length) doBatchMatchLocalIcons(); else alert('未加载到本地图标列表，请确保 icons/list.json 存在且页面从项目根目录打开。');
+                });
+                return;
+            }
+            doBatchMatchLocalIcons();
+        }
+
+        function doBatchMatchLocalIcons() {
+            var map = getCaseIconsFromStorage();
+            var iconKeyToFile = {};
+            localIconsList.forEach(function(f) {
+                var base = f.replace(/\.[^.]+$/, '');
+                var norm = normalizeForMatch(base).replace(/_+$/, '');
+                if (!iconKeyToFile[norm]) iconKeyToFile[norm] = f;
+                var noUnderscore = norm.replace(/_/g, '');
+                if (noUnderscore && !iconKeyToFile[noUnderscore]) iconKeyToFile[noUnderscore] = f;
+            });
+            var assigned = 0;
+            allIconsList.forEach(function(item) {
+                var key = item.key;
+                var norm = normalizeForMatch(key);
+                var f = iconKeyToFile[norm] || iconKeyToFile[norm.replace(/_/g, '')] || iconKeyToFile[key];
+                if (f) {
+                    map[key] = 'icons/' + f;
+                    assigned++;
                 }
+            });
+            saveCaseIconsToStorage(map);
+            loadIconsTable();
+            alert('已为 ' + assigned + ' 个案例匹配本地图标。');
+        }
+
+        function openLocalIconPicker(key) {
+            currentIconPickerKey = key;
+            var modal = document.getElementById('local-icon-picker-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+                renderLocalIconPickerGrid(localIconsList);
+                var q = document.getElementById('local-icon-picker-search');
+                if (q) { q.value = ''; q.placeholder = '搜索图标文件名…'; }
+            }
+        }
+
+        function closeLocalIconPicker() {
+            currentIconPickerKey = null;
+            var modal = document.getElementById('local-icon-picker-modal');
+            if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+        }
+
+        function filterLocalIconPicker() {
+            var q = (document.getElementById('local-icon-picker-search') && document.getElementById('local-icon-picker-search').value || '').toLowerCase();
+            var list = q ? localIconsList.filter(function(f) { return f.toLowerCase().indexOf(q) !== -1; }) : localIconsList.slice();
+            renderLocalIconPickerGrid(list);
+        }
+
+        function renderLocalIconPickerGrid(list) {
+            var grid = document.getElementById('local-icon-picker-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            list.forEach(function(f) {
+                var src = 'icons/' + encodeURIComponent(f);
+                var div = document.createElement('div');
+                div.className = 'flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 cursor-pointer border border-transparent hover:border-green-300';
+                div.title = f;
+                div.innerHTML = '<img src="' + src + '" alt="" class="w-10 h-10 object-contain" onerror="this.style.visibility=\'hidden\'">';
+                var span = document.createElement('span');
+                span.className = 'text-xs text-gray-500 mt-1 truncate w-full text-center';
+                span.textContent = f.length > 14 ? f.slice(0, 12) + '…' : f;
+                div.appendChild(span);
+                div.onclick = function() { setCaseIconLocal(currentIconPickerKey, f); closeLocalIconPicker(); };
+                grid.appendChild(div);
+            });
+        }
+
+        function setCaseIconLocal(key, filename) {
+            var map = getCaseIconsFromStorage();
+            map[key] = 'icons/' + filename;
+            saveCaseIconsToStorage(map);
+            loadIconsTable();
+        }
+        function filterIconsTable() {
+            var q = (document.getElementById('icons-search') && document.getElementById('icons-search').value || '').toLowerCase().trim();
+            filteredIconsList = q ? allIconsList.filter(function(item) {
+                return item.key.toLowerCase().indexOf(q) !== -1 ||
+                    (item.title && item.title.toLowerCase().indexOf(q) !== -1) ||
+                    (item.subtitle && item.subtitle.toLowerCase().indexOf(q) !== -1);
+            }) : allIconsList.slice();
+            renderIconsTable();
+            var configured = 0;
+            var map = getCaseIconsFromStorage();
+            allIconsList.forEach(function(item) { if (map[item.key]) configured++; });
+            var statsEl = document.getElementById('icons-stats');
+            if (statsEl) statsEl.textContent = allIconsList.length + ' 个案例，' + configured + ' 个已配置图标';
+        }
+        function renderIconsTable() {
+            var tbody = document.getElementById('icons-table-body');
+            if (!tbody) return;
+            var map = getCaseIconsFromStorage();
+            tbody.innerHTML = '';
+            filteredIconsList.forEach(function(item) {
+                var val = map[item.key] || '';
+                var display = val ? (val.startsWith('http') || val.startsWith('data:') || val.startsWith('icons/'))
+                    ? '<img src="' + escapeHtml(val) + '" alt="" class="w-10 h-10 object-contain rounded" onerror="this.parentNode.innerHTML=\'<span class=text-2xl>📦</span>\'">'
+                    : '<span class="text-2xl">' + escapeHtml(val) + '</span>'
+                    : '<span class="text-gray-400 text-sm">未设置</span>';
+                var keyEsc = item.key.replace(/'/g, "\\'");
+                var tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 border-b border-gray-100';
+                tr.innerHTML = '<td class="px-4 py-3 w-16">' + display + '</td>' +
+                    '<td class="px-4 py-3 text-sm font-mono text-gray-800">' + escapeHtml(item.key) + '</td>' +
+                    '<td class="px-4 py-3"><div class="font-medium text-gray-900">' + escapeHtml(item.title) + '</div>' + (item.subtitle ? '<div class="text-xs text-gray-500">' + escapeHtml(item.subtitle) + '</div>' : '') + '</td>' +
+                    '<td class="px-4 py-3 text-xs text-gray-500 max-w-[200px] truncate" title="' + escapeHtml(val) + '">' + escapeHtml(val || '-') + '</td>' +
+                    '<td class="px-4 py-3"><button type="button" onclick="openLocalIconPicker(\'' + keyEsc + '\')" class="px-2 py-1 mr-1 bg-green-100 text-green-800 rounded text-xs hover:bg-green-200">本地图标</button>' +
+                    '<button type="button" onclick="promptSetCaseIconEmoji(\'' + keyEsc + '\')" class="px-2 py-1 mr-1 bg-amber-100 text-amber-800 rounded text-xs hover:bg-amber-200">Emoji</button>' +
+                    '<button type="button" onclick="promptSetCaseIconUrl(\'' + keyEsc + '\')" class="px-2 py-1 mr-1 bg-blue-100 text-blue-800 rounded text-xs hover:bg-blue-200">图片 URL</button>' +
+                    '<button type="button" onclick="clearCaseIcon(\'' + keyEsc + '\')" class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs hover:bg-gray-200">清除</button></td>';
+                tbody.appendChild(tr);
+            });
+        }
+        function promptSetCaseIconEmoji(key) {
+            var map = getCaseIconsFromStorage();
+            var current = map[key] && !map[key].startsWith('http') && !map[key].startsWith('data:') ? map[key] : '📦';
+            var v = window.prompt('输入一个 Emoji 作为该案例图标：', current);
+            if (v === null) return;
+            v = (v && v.trim()) ? v.trim() : '';
+            if (v) { map[key] = v; saveCaseIconsToStorage(map); loadIconsTable(); }
+        }
+        function promptSetCaseIconUrl(key) {
+            var map = getCaseIconsFromStorage();
+            var current = (map[key] && (map[key].startsWith('http') || map[key].startsWith('data:'))) ? map[key] : '';
+            var v = window.prompt('输入图片 URL（http/https 或 data: 开头）：', current);
+            if (v === null) return;
+            v = (v && v.trim()) ? v.trim() : '';
+            if (v) { map[key] = v; saveCaseIconsToStorage(map); loadIconsTable(); } else if (map[key]) { delete map[key]; saveCaseIconsToStorage(map); loadIconsTable(); }
+        }
+        function clearCaseIcon(key) {
+            var map = getCaseIconsFromStorage();
+            delete map[key];
+            saveCaseIconsToStorage(map);
+            loadIconsTable();
+        }
+        function exportCaseIcons() {
+            var map = getCaseIconsFromStorage();
+            var json = JSON.stringify(map, null, 2);
+            var a = document.createElement('a');
+            a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+            a.download = 'case_icons.json';
+            a.click();
+        }
 
         // 筛选案例
         function filterCases() {
@@ -1346,11 +1943,13 @@
             if (totalEl) totalEl.textContent = total;
             if (currentPageEl) currentPageEl.textContent = currentPage;
 
-            const totalPages = Math.ceil(total / itemsPerPage);
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
+            var totalPages = Math.ceil(total / itemsPerPage);
+            var prevBtn = document.getElementById('prev-btn');
+            var nextBtn = document.getElementById('next-btn');
             if (prevBtn) prevBtn.disabled = currentPage === 1;
             if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+            var pageSizeEl = document.getElementById('cases-page-size');
+            if (pageSizeEl) pageSizeEl.value = String(itemsPerPage);
         }
 
         // 上一页
@@ -1364,9 +1963,20 @@
 
         // 下一页
         function nextPage() {
-            const totalPages = Math.ceil(filteredCasesData.length / itemsPerPage);
+            var totalPages = Math.ceil(filteredCasesData.length / itemsPerPage);
             if (currentPage < totalPages) {
                 currentPage++;
+                renderCasesTable();
+                updatePagination();
+            }
+        }
+
+        // 每页条数切换（O2-7）
+        function changePageSize(size) {
+            var n = parseInt(size, 10);
+            if (n === 20 || n === 50 || n === 100) {
+                itemsPerPage = n;
+                currentPage = 1;
                 renderCasesTable();
                 updatePagination();
             }
@@ -1445,7 +2055,7 @@
                 return;
             }
 
-            if (!confirm(`确定要删除选中的 ${selectedCases.size} 个案例吗？此操作不可恢复！`)) {
+            if (!confirm('确定要删除选中的 ' + selectedCases.size + ' 个案例吗？将同时删除其 5D、用户、商业数据，且不可恢复。')) {
                 return;
             }
 
@@ -1464,20 +2074,20 @@
                         db.run("DELETE FROM cases_5d_scores WHERE case_key = ?", [key]);
                         db.run("DELETE FROM cases_user_data WHERE case_key = ?", [key]);
                         db.run("DELETE FROM cases_business_data WHERE case_key = ?", [key]);
-            } catch (e) {
-                        console.error(`删除案例 ${key} 失败:`, e);
+                    } catch (e) {
+                        console.error('删除案例 ' + key + ' 失败:', e);
                     }
                 });
-                
+                addOperationLog('delete', 'case', 'batch', 'count', null, String(count));
                 saveDatabase();
                 selectedCases.clear();
                 loadData();
-                showNotification(`成功删除 ${count} 个案例`, 'success');
-                addLog(`成功删除 ${count} 个案例`, 'success');
+                showNotification('成功删除 ' + count + ' 个案例', 'success');
+                addLog('成功删除 ' + count + ' 个案例', 'success');
             } catch (error) {
                 console.error('批量删除失败:', error);
-                showNotification('批量删除失败: ' + error.message, 'error');
-                addLog('批量删除失败: ' + error.message, 'error');
+                showNotification(friendlyErrorMessage(error, '批量删除失败'), 'error');
+                addLog('批量删除失败: ' + friendlyErrorMessage(error), 'error');
             }
         }
 
@@ -1692,15 +2302,73 @@
                 addLog(`批量编辑: 更新 ${updatedCount} 个案例`, 'success');
             } catch (error) {
                 console.error('批量编辑失败:', error);
-                showNotification('批量编辑失败: ' + error.message, 'error');
-                addLog('批量编辑失败: ' + error.message, 'error');
+                showNotification(friendlyErrorMessage(error, '批量编辑失败'), 'error');
+                addLog('批量编辑失败: ' + friendlyErrorMessage(error), 'error');
             }
         }
 
-        // 查看案例详情（数据预览）
-        function viewCaseDetail(key) {
+        // 无 DB 时从 communityCases 展示案例详情
+        function showCaseDetailFromCommunity(key, c) {
+            const title = c.title || key;
+            const subtitle = c.subtitle || '';
+            const tags = (c.tags || []).join(' ');
+            const scores = (c.scores || []).slice(0, 5);
+            const scoreStr = scores.length >= 5 ? scores.join(', ') : '暂无';
+            const dao = (c.dao || '').slice(0, 200) + (c.dao && c.dao.length > 200 ? '…' : '');
+            const hasUser = c.user_metrics && typeof c.user_metrics === 'object';
+            const hasBiz = c.business_model && typeof c.business_model === 'object';
+            const hasKey = c.key_metrics && typeof c.key_metrics === 'object';
+            let completeness = 0;
+            if (c.scores && c.scores.length >= 5) completeness += 40;
+            if (hasUser) completeness += 30;
+            if (hasBiz) completeness += 15;
+            if (hasKey) completeness += 15;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">案例详情（来自 community_cases.js） - ${escapeHtml(title)}</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                    </div>
+                    <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">当前为仅读预览（数据库未初始化），数据来自 community_cases.js。</div>
+                    <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-blue-700">信息完整度</span>
+                            <span class="text-sm font-bold text-gray-700">${completeness}%</span>
+                        </div>
+                        <div class="w-full h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                            <div class="h-full ${completeness >= 80 ? 'bg-green-500' : completeness >= 50 ? 'bg-yellow-500' : 'bg-red-500'}" style="width: ${completeness}%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-sm">
+                        <div><strong class="text-gray-700">案例 Key:</strong> <span class="font-mono text-gray-900">${escapeHtml(key)}</span></div>
+                        <div><strong class="text-gray-700">标题:</strong> <span class="text-gray-900">${escapeHtml(title)}</span></div>
+                        <div><strong class="text-gray-700">副标题:</strong> <span class="text-gray-500">${escapeHtml(subtitle)}</span></div>
+                        <div><strong class="text-gray-700">标签:</strong> <span class="text-gray-600">${escapeHtml(tags) || '-'}</span></div>
+                        <div><strong class="text-gray-700">5D 评分:</strong> <span class="text-gray-900">${scoreStr}</span></div>
+                        <div><strong class="text-gray-700">三块:</strong> 用户 ${hasUser ? '✓' : '✗'} / 商业 ${hasBiz ? '✓' : '✗'} / 关键指标 ${hasKey ? '✓' : '✗'}</div>
+                        <div><strong class="text-gray-700">DAO（摘要）:</strong> <p class="text-gray-600 mt-1">${escapeHtml(dao) || '-'}</p></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.onclick = function (e) { if (e.target === modal) modal.remove(); };
+        }
+
+        // 查看案例详情（数据预览）；无 DB 时从 communityCases 预览
+        async function viewCaseDetail(key) {
             if (!db) {
-                showNotification('数据库未初始化', 'error');
+                try { await initDatabase(); } catch (e) { /* ignore */ }
+            }
+            if (!db) {
+                const c = typeof communityCases !== 'undefined' && communityCases ? communityCases[key] : null;
+                if (c && typeof c === 'object') {
+                    showCaseDetailFromCommunity(key, c);
+                    return;
+                }
+                showNotification('数据库未初始化且无该案例的 JS 数据，无法预览。请使用 HTTP 服务器打开本页以加载 SQL.js。', 'error');
                 return;
             }
 
@@ -2114,11 +2782,12 @@
             document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
 
             // 显示选中部分
-            const targetSection = document.getElementById(`section-${section}`);
+            var targetSection = document.getElementById('section-' + section);
             if (targetSection) {
                 targetSection.classList.remove('hidden');
                 targetSection.style.display = '';
             }
+            if (section === 'collect') restoreCollectionLog();
             
             // 激活导航项
             if (typeof event !== 'undefined' && event?.target) {
@@ -2140,11 +2809,13 @@
             const titles = {
                 dashboard: '数据概览',
                 cases: '案例管理',
+                icons: '图标管理',
                 collect: '数据采集',
                 import: '数据导入',
                 export: '数据导出',
                 sync: '数据同步',
                 quality: '数据质量',
+                'info-density': '信息增密',
                 analytics: '数据分析',
                 history: '操作历史',
                 settings: '系统设置'
@@ -2152,16 +2823,24 @@
             const descriptions = {
                 dashboard: '查看系统数据统计和概览',
                 cases: '管理案例数据，包括新增、编辑、删除',
+                icons: '为案例配置展示图标（Emoji 或图片 URL），与主看板联动',
                 collect: '自动和手动采集最新数据',
                 import: '从文件导入数据',
                 export: '导出数据到文件',
                 sync: '同步本地和云端数据',
                 quality: '检查数据完整性、准确性和一致性',
+                'info-density': '实效性、信息增密、核心案例多维度报告与自助更新',
                 analytics: '数据统计分析和可视化',
                 history: '查看所有数据操作的历史记录',
                 settings: '系统配置和设置'
             };
             
+            // 如果切换到图标管理页面，加载图标列表
+            if (section === 'icons') {
+                setTimeout(() => {
+                    loadIconsTable();
+                }, 100);
+            }
             // 如果切换到操作历史页面，加载历史记录
             if (section === 'history') {
                 setTimeout(() => {
@@ -2178,6 +2857,13 @@
             if (section === 'analytics') {
                 setTimeout(() => {
                     updateAnalytics();
+                }, 100);
+            }
+
+            // 如果切换到信息增密页面，若有缓存报告则刷新表格展示
+            if (section === 'info-density' && typeof lastInfoDensityReport !== 'undefined' && lastInfoDensityReport) {
+                setTimeout(() => {
+                    switchInfoDensityReportView();
                 }, 100);
             }
 
@@ -2228,159 +2914,266 @@
                 }
                 
                 saveDatabase();
-                addLog(`5D数据采集完成，共采集 ${collected} 条`, 'success');
+                addLog('5D数据采集完成，共采集 ' + collected + ' 条', 'success');
+                showNotification('5D数据采集完成，共 ' + collected + ' 条', 'success');
                 loadData();
             } catch (error) {
-                addLog('采集失败: ' + error.message, 'error');
+                console.error('5D采集失败:', error);
+                addLog(friendlyErrorMessage(error, '采集失败'), 'error');
+                showNotification(friendlyErrorMessage(error), 'error');
             }
         }
 
-        async function collectUserData() {
+        // 解析「1.5亿」「9500万」等中文数字为数值（用于本地数据回退）
+        function parseChineseNum(str) {
+            if (str == null || typeof str !== 'string') return null;
+            var m = str.replace(/\s/g, '').match(/(\d+(?:\.\d+)?)\s*[亿万]?/);
+            if (!m) return null;
+            var n = parseFloat(m[1]);
+            if (str.indexOf('亿') !== -1) n *= 1e8;
+            else if (str.indexOf('万') !== -1) n *= 1e4;
+            return Math.round(n);
+        }
+
+        async function collectUserData(optionalCaseKeys) {
             if (!db) {
                 addLog('数据库未初始化', 'error');
                 return;
             }
             
-            addLog('开始采集用户数据...', 'info');
+            addLog(optionalCaseKeys && optionalCaseKeys.length ? '开始采集用户数据（建议案例 ' + optionalCaseKeys.length + ' 条）...' : '开始采集用户数据...', 'info');
             try {
-                // 从数据库获取所有案例
-                const result = db.exec("SELECT case_key, title FROM cases_basic");
-                const cases = result.length > 0 ? result[0].values : [];
+                var result = db.exec("SELECT case_key, title FROM cases_basic");
+                var cases = result.length > 0 ? result[0].values : [];
+                if (optionalCaseKeys && optionalCaseKeys.length > 0) {
+                    var keySet = {};
+                    optionalCaseKeys.forEach(function(k) { keySet[k] = true; });
+                    cases = cases.filter(function(row) { return keySet[row[0]]; });
+                }
                 
                 if (cases.length === 0) {
-                    addLog('没有找到案例数据，请先同步硬编码数据', 'error');
+                    addLog(optionalCaseKeys ? '建议列表中无已入库案例，请先同步硬编码数据' : '没有找到案例数据，请先同步硬编码数据', 'error');
                     return;
                 }
                 
-                // 尝试调用后端API采集
-                addLog('正在调用后端API采集用户数据...', 'info');
+                var apiAvailable = window.location.protocol !== 'file:' && await checkCollectApiAvailable();
+                if (window.location.protocol !== 'file:' && !apiAvailable) {
+                    addLog('后端未启动，已使用本地数据补充', 'info');
+                }
+                addLog('正在采集（API + 本地数据回退）...', 'info');
+                var collected = 0;
+                var apiUnavailableLogged = !apiAvailable;
                 
-                let collected = 0;
-                for (const row of cases) {
+                for (var i = 0; i < cases.length; i++) {
+                    var row = cases[i];
+                    var key = row[0];
+                    var title = row[1];
+                    var done = false;
+                    
                     try {
-                        const key = row[0];
-                        const title = row[1];
-                        
-                        // 调用后端API采集
-                        try {
-                            const response = await fetch(`http://localhost:3000/api/collect/user`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ caseKey: key, caseName: title }),
-                                signal: AbortSignal.timeout(5000)
-                            });
-                            
-                            if (response.ok) {
-                                const result = await response.json();
-                                if (result.data && (result.data.mau || result.data.dau)) {
-                                    db.run(`INSERT OR REPLACE INTO cases_user_data 
-                                        (case_key, mau, dau, data_source, last_updated)
-                                        VALUES (?, ?, ?, ?, ?)`,
-                                        [key, result.data.mau, result.data.dau, result.data.source || 'api', new Date().toISOString()]);
-                                    collected++;
-                                    addLog(`已采集: ${title} (${collected}/${cases.length})`, 'success');
-                                } else {
-                                    addLog(`无数据: ${title}`, 'info');
+                        if (window.location.protocol !== 'file:' && apiAvailable) {
+                            try {
+                                var response = await fetch(getCasesApiBase() + '/api/collect/user', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ caseKey: key, caseName: title }),
+                                    signal: AbortSignal.timeout(5000)
+                                });
+                                if (response.ok) {
+                                    var apiResult = await response.json();
+                                    if (apiResult.data && (apiResult.data.mau || apiResult.data.dau)) {
+                                        db.run('INSERT OR REPLACE INTO cases_user_data (case_key, mau, dau, data_source, last_updated) VALUES (?, ?, ?, ?, ?)',
+                                            [key, apiResult.data.mau || null, apiResult.data.dau || null, apiResult.data.source || 'api', new Date().toISOString()]);
+                                        collected++;
+                                        addLog('已采集: ' + title + ' (' + collected + '/' + cases.length + ')', 'success');
+                                        done = true;
+                                    }
                                 }
-                            } else {
-                                throw new Error('API请求失败');
+                            } catch (apiErr) {
+                                if (!apiUnavailableLogged) {
+                                    addLog('后端API暂不可用，已改用本地数据补充', 'info');
+                                    apiUnavailableLogged = true;
+                                }
                             }
-                        } catch (apiError) {
-                            // API不可用时，跳过
-                            addLog(`API不可用: ${title}`, 'info');
+                        }
+                        if (!done && typeof communityCases !== 'undefined' && communityCases[key]) {
+                            var um = communityCases[key].user_metrics;
+                            if (um && (um.monthly_active_users || um.daily_active_users)) {
+                                var mau = parseChineseNum(um.monthly_active_users) || parseChineseNum(um.total_users);
+                                var dau = parseChineseNum(um.daily_active_users);
+                                if (mau || dau) {
+                                    db.run('INSERT OR REPLACE INTO cases_user_data (case_key, mau, dau, data_source, last_updated) VALUES (?, ?, ?, ?, ?)',
+                                        [key, mau || null, dau || null, 'hardcoded', new Date().toISOString()]);
+                                    collected++;
+                                    addLog('已采集: ' + title + ' (来自本地, ' + collected + '/' + cases.length + ')', 'success');
+                                    done = true;
+                                }
+                            }
+                        }
+                        if (!done && (window.location.protocol === 'file:' || apiUnavailableLogged)) {
+                            // 静默跳过，不再逐条刷「API不可用」
+                        } else if (!done && !apiUnavailableLogged) {
+                            addLog('无数据: ' + title, 'info');
                         }
                     } catch (e) {
-                        addLog(`采集失败: ${row[0]} - ${e.message}`, 'error');
+                        addLog('采集失败: ' + row[0] + ' - ' + e.message, 'error');
                     }
                 }
                 
                 saveDatabase();
-                addLog(`用户数据采集完成，共采集 ${collected} 条`, 'success');
+                addLog('用户数据采集完成，共采集 ' + collected + ' 条', 'success');
+                if (collected === 0) {
+                    addLog('本次 0 条：后端未返回数据且本地案例无 user_metrics 可补充。', 'info');
+                    addLog('建议：请先在「数据同步」执行「开始同步」同步 community_cases.js；或确保案例在 community_cases.js 中已包含 user_metrics 后再采集。', 'info');
+                    showNotification('用户数据采集完成 0 条，请先同步数据或补全 user_metrics', 'warning');
+                } else {
+                    showNotification('用户数据采集完成，共 ' + collected + ' 条', 'success');
+                }
                 loadData();
             } catch (error) {
-                addLog('采集失败: ' + error.message, 'error');
+                console.error('用户数据采集失败:', error);
+                addLog(friendlyErrorMessage(error, '采集失败'), 'error');
+                showNotification(friendlyErrorMessage(error), 'error');
             }
         }
 
-        async function collectBusinessData() {
+        // 从 business_model 文案中解析收入数值（亿/万）
+        function parseRevenueFromBusiness(obj) {
+            if (!obj || typeof obj !== 'object') return null;
+            var fm = obj.financial_metrics;
+            if (fm && fm.annual_revenue) return parseChineseNum(fm.annual_revenue);
+            return null;
+        }
+
+        async function collectBusinessData(optionalCaseKeys) {
             if (!db) {
                 addLog('数据库未初始化', 'error');
                 return;
             }
             
-            addLog('开始采集商业数据...', 'info');
+            addLog(optionalCaseKeys && optionalCaseKeys.length ? '开始采集商业数据（建议案例 ' + optionalCaseKeys.length + ' 条）...' : '开始采集商业数据...', 'info');
             try {
-                // 从数据库获取所有案例
-                const result = db.exec("SELECT case_key, title FROM cases_basic");
-                const cases = result.length > 0 ? result[0].values : [];
+                var result = db.exec("SELECT case_key, title FROM cases_basic");
+                var cases = result.length > 0 ? result[0].values : [];
+                if (optionalCaseKeys && optionalCaseKeys.length > 0) {
+                    var keySet = {};
+                    optionalCaseKeys.forEach(function(k) { keySet[k] = true; });
+                    cases = cases.filter(function(row) { return keySet[row[0]]; });
+                }
                 
                 if (cases.length === 0) {
-                    addLog('没有找到案例数据，请先同步硬编码数据', 'error');
+                    addLog(optionalCaseKeys ? '建议列表中无已入库案例，请先同步硬编码数据' : '没有找到案例数据，请先同步硬编码数据', 'error');
                     return;
                 }
                 
-                addLog('正在调用后端API采集商业数据...', 'info');
+                var apiAvailable = window.location.protocol !== 'file:' && await checkCollectApiAvailable();
+                if (window.location.protocol !== 'file:' && !apiAvailable) {
+                    addLog('后端未启动，已使用本地数据补充', 'info');
+                }
+                addLog('正在采集（API + 本地数据回退）...', 'info');
+                var collected = 0;
+                var apiUnavailableLogged = !apiAvailable;
                 
-                let collected = 0;
-                for (const row of cases) {
+                for (var i = 0; i < cases.length; i++) {
+                    var row = cases[i];
+                    var key = row[0];
+                    var title = row[1];
+                    var done = false;
+                    
                     try {
-                        const key = row[0];
-                        const title = row[1];
-                        
-                        // 调用后端API采集
-                        try {
-                            // 检查是否从file://打开
-                            if (window.location.protocol === 'file:') {
-                                addLog(`跳过API调用（file://协议）: ${title}`, 'info');
-                                continue;
-                            }
-                            
-                            const response = await fetch(`http://localhost:3000/api/collect/business`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ caseKey: key, caseName: title }),
-                                signal: AbortSignal.timeout(5000),
-                                mode: 'cors'
-                            });
-                            
-                            if (response.ok) {
-                                const result = await response.json();
-                                if (result.data && result.data.revenue) {
-                                    db.run(`INSERT OR REPLACE INTO cases_business_data 
-                                        (case_key, revenue_annual, data_source, last_updated)
-                                        VALUES (?, ?, ?, ?)`,
-                                        [key, result.data.revenue, result.data.source || 'api', new Date().toISOString()]);
-                                    collected++;
-                                    addLog(`已采集: ${title} (${collected}/${cases.length})`, 'success');
-                                } else {
-                                    addLog(`无数据: ${title}`, 'info');
+                        if (window.location.protocol !== 'file:' && apiAvailable) {
+                            try {
+                                var response = await fetch(getCasesApiBase() + '/api/collect/business', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ caseKey: key, caseName: title }),
+                                    signal: AbortSignal.timeout(5000),
+                                    mode: 'cors'
+                                });
+                                if (response.ok) {
+                                    var apiResult = await response.json();
+                                    if (apiResult.data && apiResult.data.revenue != null) {
+                                        db.run('INSERT OR REPLACE INTO cases_business_data (case_key, revenue_annual, data_source, last_updated) VALUES (?, ?, ?, ?)',
+                                            [key, apiResult.data.revenue, apiResult.data.source || 'api', new Date().toISOString()]);
+                                        collected++;
+                                        addLog('已采集: ' + title + ' (' + collected + '/' + cases.length + ')', 'success');
+                                        done = true;
+                                    }
                                 }
-                            } else {
-                                throw new Error('API请求失败');
+                            } catch (apiErr) {
+                                if (!apiUnavailableLogged) {
+                                    addLog('后端API暂不可用，已改用本地数据补充', 'info');
+                                    apiUnavailableLogged = true;
+                                }
                             }
-                        } catch (apiError) {
-                            // API不可用时，跳过
-                            addLog(`API不可用: ${title}`, 'info');
+                        }
+                        if (!done && typeof communityCases !== 'undefined' && communityCases[key]) {
+                            var revenue = parseRevenueFromBusiness(communityCases[key].business_model);
+                            if (revenue != null) {
+                                db.run('INSERT OR REPLACE INTO cases_business_data (case_key, revenue_annual, data_source, last_updated) VALUES (?, ?, ?, ?)',
+                                    [key, revenue, 'hardcoded', new Date().toISOString()]);
+                                collected++;
+                                addLog('已采集: ' + title + ' (来自本地, ' + collected + '/' + cases.length + ')', 'success');
+                                done = true;
+                            }
+                        }
+                        if (!done && (window.location.protocol === 'file:' || apiUnavailableLogged)) { }
+                        else if (!done && !apiUnavailableLogged) {
+                            addLog('无数据: ' + title, 'info');
                         }
                     } catch (e) {
-                        addLog(`采集失败: ${row[0]} - ${e.message}`, 'error');
+                        addLog('采集失败: ' + row[0] + ' - ' + e.message, 'error');
                     }
                 }
                 
-                addLog(`商业数据采集完成，共采集 ${collected} 条`, 'success');
+                addLog('商业数据采集完成，共采集 ' + collected + ' 条', 'success');
+                if (collected === 0) {
+                    addLog('本次 0 条：后端未返回数据且本地案例无 business_model 可补充。', 'info');
+                    addLog('建议：请先在「数据同步」执行「开始同步」同步 community_cases.js；或确保案例在 community_cases.js 中已包含 business_model 后再采集。', 'info');
+                    showNotification('商业数据采集完成 0 条，请先同步数据或补全 business_model', 'warning');
+                } else {
+                    showNotification('商业数据采集完成，共 ' + collected + ' 条', 'success');
+                }
                 loadData();
             } catch (error) {
-                addLog('采集失败: ' + error.message, 'error');
+                console.error('商业数据采集失败:', error);
+                addLog(friendlyErrorMessage(error, '采集失败'), 'error');
+                showNotification(friendlyErrorMessage(error), 'error');
             }
         }
 
-        // 添加日志
+        // 采集日志持久化（O2-9）：最近 100 条存 localStorage，刷新后恢复
+        var COLLECTION_LOG_KEY = 'cases_collection_log';
+        var COLLECTION_LOG_MAX = 100;
         function addLog(message, type = 'info') {
-            const log = document.getElementById('collection-log');
-            const div = document.createElement('div');
-            div.className = `p-3 rounded-lg ${type === 'success' ? 'bg-green-50 text-green-700' : type === 'error' ? 'bg-red-50 text-red-700' : 'bg-blue-50 text-blue-700'}`;
-            div.innerHTML = `<span class="text-sm">${new Date().toLocaleTimeString()}</span> - ${message}`;
-            log.insertBefore(div, log.firstChild);
+            var logEl = document.getElementById('collection-log');
+            var timeStr = new Date().toLocaleTimeString();
+            var div = document.createElement('div');
+            div.className = 'p-3 rounded-lg ' + (type === 'success' ? 'bg-green-50 text-green-700' : type === 'error' ? 'bg-red-50 text-red-700' : 'bg-blue-50 text-blue-700');
+            div.innerHTML = '<span class="text-sm">' + timeStr + '</span> - ' + escapeHtml(message);
+            if (logEl) logEl.insertBefore(div, logEl.firstChild);
+            var list = JSON.parse(localStorage.getItem(COLLECTION_LOG_KEY) || '[]');
+            list.unshift({ message: message, type: type, time: timeStr });
+            if (list.length > COLLECTION_LOG_MAX) list.length = COLLECTION_LOG_MAX;
+            try { localStorage.setItem(COLLECTION_LOG_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        function restoreCollectionLog() {
+            var logEl = document.getElementById('collection-log');
+            if (!logEl) return;
+            var list = JSON.parse(localStorage.getItem(COLLECTION_LOG_KEY) || '[]');
+            logEl.innerHTML = '';
+            list.forEach(function (item) {
+                var div = document.createElement('div');
+                div.className = 'p-3 rounded-lg ' + (item.type === 'success' ? 'bg-green-50 text-green-700' : item.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-blue-50 text-blue-700');
+                div.innerHTML = '<span class="text-sm">' + escapeHtml(item.time) + '</span> - ' + escapeHtml(item.message);
+                logEl.appendChild(div);
+            });
+        }
+        function clearCollectionLog() {
+            if (!confirm('确定清空采集日志吗？仅清除当前展示与本地缓存，不影响数据库。')) return;
+            try { localStorage.removeItem(COLLECTION_LOG_KEY); } catch (e) {}
+            var logEl = document.getElementById('collection-log');
+            if (logEl) logEl.innerHTML = '';
         }
 
         // 导入/导出函数
@@ -2477,7 +3270,16 @@
                 return;
             }
 
-            // 显示预览和确认
+            // 显示预览和确认（O2-12 预览；O2-13 覆盖说明）
+            var existingKeys = [];
+            if (db) {
+                try {
+                    var r = db.exec("SELECT case_key FROM cases_basic");
+                    if (r.length > 0 && r[0].values) existingKeys = r[0].values.map(function(row) { return row[0]; });
+                } catch (e) {}
+            }
+            var willOverwrite = previewData.filter(function(item) { return existingKeys.indexOf(item.case_key || item.key) !== -1; });
+            var overwriteHint = willOverwrite.length > 0 ? '<div class="mb-4 p-3 bg-amber-50 rounded-lg"><p class="text-sm text-amber-800">已存在的 case_key 共 <strong>' + willOverwrite.length + '</strong> 条将被<strong>覆盖</strong>，确定继续？</p></div>' : '';
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
             modal.innerHTML = `
@@ -2486,6 +3288,7 @@
                     <div class="mb-4 p-3 bg-blue-50 rounded-lg">
                         <p class="text-sm text-blue-700">准备导入 <strong>${previewData.length}</strong> 条数据</p>
                     </div>
+                    ${overwriteHint}
                     <div class="mb-4 max-h-64 overflow-y-auto">
                         <table class="w-full text-sm">
                             <thead class="bg-gray-50">
@@ -2564,21 +3367,36 @@
             try {
                 addLog('正在导出Excel文件...', 'info');
                 
-                // 获取所有数据
-                const cases = db.exec("SELECT * FROM cases_basic");
-                const d5Scores = db.exec("SELECT * FROM cases_5d_scores");
-                const userData = db.exec("SELECT * FROM cases_user_data");
-                const businessData = db.exec("SELECT * FROM cases_business_data");
+                var cases = db.exec("SELECT * FROM cases_basic");
+                var d5Scores = db.exec("SELECT * FROM cases_5d_scores");
+                var userData = db.exec("SELECT * FROM cases_user_data");
+                var businessData = db.exec("SELECT * FROM cases_business_data");
+                var completenessMap = {};
+                if (cases.length > 0 && cases[0].values) {
+                    cases[0].values.forEach(function(row) {
+                        var key = row[0];
+                        var comp = 0;
+                        try {
+                            var d5 = db.exec("SELECT 1 FROM cases_5d_scores WHERE case_key = ?", [key]);
+                            var user = db.exec("SELECT 1 FROM cases_user_data WHERE case_key = ?", [key]);
+                            var biz = db.exec("SELECT 1 FROM cases_business_data WHERE case_key = ?", [key]);
+                            if (d5.length > 0 && d5[0].values.length > 0) comp += 40;
+                            if (user.length > 0 && user[0].values.length > 0) comp += 30;
+                            if (biz.length > 0 && biz[0].values.length > 0) comp += 30;
+                        } catch (e) {}
+                        completenessMap[key] = comp;
+                    });
+                }
                 
-                // 创建工作簿
-                const wb = XLSX.utils.book_new();
+                var wb = XLSX.utils.book_new();
                 
-                // 转换为工作表
-                if (cases.length > 0) {
-                    const ws1 = XLSX.utils.aoa_to_sheet([
-                        ['case_key', 'title', 'subtitle', 'category', 'launch_date', 'status', 'website'],
-                        ...cases[0].values
-                    ]);
+                if (cases.length > 0 && cases[0].values.length > 0) {
+                    var header = ['case_key', 'title', 'subtitle', 'category', 'launch_date', 'status', 'website', 'completeness'];
+                    var rows = cases[0].values.map(function(row) {
+                        var key = row[0];
+                        return row.concat(completenessMap[key] != null ? completenessMap[key] : 0);
+                    });
+                    var ws1 = XLSX.utils.aoa_to_sheet([header].concat(rows));
                     XLSX.utils.book_append_sheet(wb, ws1, '案例基础信息');
                 }
                 
@@ -2628,12 +3446,29 @@
             try {
                 addLog('正在导出CSV文件...', 'info');
                 
-                const cases = db.exec("SELECT * FROM cases_basic");
-                if (cases.length > 0) {
-                    const csv = Papa.unparse(cases[0].values, {
-                        header: ['case_key', 'title', 'subtitle', 'category', 'launch_date', 'status', 'website']
+                var cases = db.exec("SELECT * FROM cases_basic");
+                if (cases.length > 0 && cases[0].values.length > 0) {
+                    var completenessMap = {};
+                    cases[0].values.forEach(function(row) {
+                        var key = row[0];
+                        var comp = 0;
+                        try {
+                            var d5 = db.exec("SELECT 1 FROM cases_5d_scores WHERE case_key = ?", [key]);
+                            var user = db.exec("SELECT 1 FROM cases_user_data WHERE case_key = ?", [key]);
+                            var biz = db.exec("SELECT 1 FROM cases_business_data WHERE case_key = ?", [key]);
+                            if (d5.length > 0 && d5[0].values.length > 0) comp += 40;
+                            if (user.length > 0 && user[0].values.length > 0) comp += 30;
+                            if (biz.length > 0 && biz[0].values.length > 0) comp += 30;
+                        } catch (e) {}
+                        completenessMap[key] = comp;
                     });
-                    downloadFile(csv, `cases_data_${Date.now()}.csv`, 'text/csv');
+                    var rowsWithComp = cases[0].values.map(function(row) {
+                        return row.concat(completenessMap[row[0]] != null ? completenessMap[row[0]] : 0);
+                    });
+                    var csv = Papa.unparse(rowsWithComp, {
+                        header: ['case_key', 'title', 'subtitle', 'category', 'launch_date', 'status', 'website', 'completeness']
+                    });
+                    downloadFile(csv, 'cases_data_' + Date.now() + '.csv', 'text/csv');
                     
                     // 记录操作历史
                     addOperationLog('export', 'case', 'all', null, null, null);
@@ -2712,9 +3547,12 @@
         }
 
         // 编辑案例
-        function editCase(key) {
+        async function editCase(key) {
             if (!db) {
-                alert('数据库未初始化');
+                try { await initDatabase(); } catch (e) { /* ignore */ }
+            }
+            if (!db) {
+                showNotification('数据库未初始化，无法编辑。请使用 HTTP 服务器打开本页（如 npx serve）以加载 SQL.js 后重试。', 'error');
                 return;
             }
             
@@ -3015,8 +3853,8 @@
                 addLog(message, 'success');
             } catch (error) {
                 console.error('保存案例失败:', error);
-                showNotification('保存失败: ' + error.message, 'error');
-                addLog('保存失败: ' + error.message, 'error');
+                showNotification(friendlyErrorMessage(error, '保存失败'), 'error');
+                addLog('保存失败: ' + friendlyErrorMessage(error), 'error');
             }
         }
 
@@ -3158,9 +3996,11 @@
             }
 
             saveDatabase();
+            addOperationLog('sync', 'case', 'hardcoded', 'count', null, String(synced));
             progressBar.style.width = '100%';
             statusText.textContent = '同步完成！';
-            addSyncLog(`同步完成！共同步 ${synced} 个案例`, 'success');
+            addSyncLog('同步完成！共同步 ' + synced + ' 个案例', 'success');
+            showNotification('数据同步完成，共 ' + synced + ' 个案例', 'success');
             loadData();
         }
 
@@ -3305,38 +4145,36 @@
         // ==================== 后端服务控制 ====================
         
         // 定义服务器URL（必须在所有使用它的函数之前定义）
-        const SERVER_URL = 'http://localhost:3000';
+        var SERVER_URL = getCasesApiBase();
         let serverStatusCheckInterval = null;
         let serverLogsEventSource = null;
         let autoScrollLogs = true;
         let serverStatusUpdateInterval = null;
 
-        // 检查服务器状态
+        // 检查服务器状态（O2-10：优先用 /api/health 取版本并展示）
         async function checkServerStatus() {
             try {
-                // 检查是否从file://协议打开（会有CORS问题）
                 if (window.location.protocol === 'file:') {
-                    // 从file://打开时，无法直接访问localhost，静默处理
                     updateServerStatus(false, '需HTTP服务');
                     return;
                 }
-                
-                const response = await fetch(`${SERVER_URL}/api/server/status`, {
-                    method: 'GET',
-                    signal: AbortSignal.timeout(2000),
-                    mode: 'cors'
-                });
-                
+                var base = getCasesApiBase();
+                var healthRes = await fetch(base + '/api/health', { method: 'GET', signal: AbortSignal.timeout(2000), mode: 'cors' });
+                if (healthRes.ok) {
+                    var health = await healthRes.json();
+                    var versionStr = (health.version) ? ' v' + health.version : '';
+                    updateServerStatus(true, '运行中' + versionStr, { version: health.version });
+                    return;
+                }
+                var response = await fetch(base + '/api/server/status', { method: 'GET', signal: AbortSignal.timeout(2000), mode: 'cors' });
                 if (response.ok) {
-                    const data = await response.json();
+                    var data = await response.json();
                     updateServerStatus(true, '运行中', data);
                 } else {
                     updateServerStatus(false, '异常');
                 }
             } catch (error) {
-                // 静默处理网络错误，不输出到控制台
                 if (error.name !== 'AbortError' && !error.message.includes('Failed to fetch')) {
-                    // 只记录非预期的错误
                     console.debug('服务器状态检查:', error.message);
                 }
                 updateServerStatus(false, '未运行');
@@ -3344,16 +4182,15 @@
         }
 
         // 更新服务器状态显示
-        function updateServerStatus(isOnline, text, details = null) {
-            const indicator = document.getElementById('server-status-indicator');
-            const statusText = document.getElementById('server-status-text');
-            
+        function updateServerStatus(isOnline, text, details) {
+            details = details || null;
+            var indicator = document.getElementById('server-status-indicator');
+            var statusText = document.getElementById('server-status-text');
+            if (!indicator || !statusText) return;
             if (isOnline) {
                 indicator.className = 'w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-sm shadow-green-500/50';
-                let statusDisplay = text;
-                if (details && details.pid) {
-                    statusDisplay = `${text} (PID: ${details.pid})`;
-                }
+                var statusDisplay = text;
+                if (details && details.pid) statusDisplay = text + ' (PID: ' + details.pid + ')';
                 statusText.textContent = statusDisplay;
                 statusText.className = 'text-xs font-semibold text-green-600';
             } else {
@@ -3596,6 +4433,185 @@
             
             // 启动自动更新（更频繁的状态检查）
             startServerStatusAutoUpdate();
+        }
+
+        // ==================== 信息增密：多维度报告 ====================
+        
+        let lastInfoDensityReport = null;
+
+        function getCasesForInfoDensity() {
+            if (typeof communityCases !== 'undefined' && communityCases && Object.keys(communityCases).length > 0) {
+                return Object.keys(communityCases).map(k => ({ key: k, data: communityCases[k] })).filter(c => c.data && typeof c.data === 'object');
+            }
+            if (db) {
+                try {
+                    const r = db.exec("SELECT case_key, title FROM cases_basic");
+                    const rows = r.length && r[0].values ? r[0].values : [];
+                    return rows.map(row => ({ key: row[0], data: { title: row[1] } }));
+                } catch (e) { console.warn(e); }
+            }
+            return [];
+        }
+
+        function runAllInfoDensityReports() {
+            const cases = getCasesForInfoDensity();
+            if (!cases.length) {
+                showNotification('无案例数据，请先加载或同步 community_cases.js', 'error');
+                return;
+            }
+            const api = window.InfoDensityReport;
+            if (!api) {
+                showNotification('未加载 info-density-report.js，请检查 scripts 路径', 'error');
+                return;
+            }
+            lastInfoDensityReport = api.runAllReports(communityCases);
+            document.getElementById('info-density-timeliness-summary').textContent = `新鲜 ${lastInfoDensityReport.timeliness.summary.fresh} / 一般 ${lastInfoDensityReport.timeliness.summary.normal} / 过时 ${lastInfoDensityReport.timeliness.summary.stale}`;
+            document.getElementById('info-density-density-summary').textContent = `低 ${lastInfoDensityReport.density.summary.low} / 中 ${lastInfoDensityReport.density.summary.mid} / 高 ${lastInfoDensityReport.density.summary.high}`;
+            document.getElementById('info-density-core-summary').textContent = `完整 ${lastInfoDensityReport.coreDensity.summary.ok} / 部分 ${lastInfoDensityReport.coreDensity.summary.partial} / 待补 ${lastInfoDensityReport.coreDensity.summary.low}`;
+            updateInfoDensityCollectHint();
+            switchInfoDensityReportView();
+            showNotification('全部报告已生成', 'success');
+        }
+
+        function runTimelinessReport() {
+            const cases = getCasesForInfoDensity();
+            if (!cases.length) { showNotification('无案例数据', 'error'); return; }
+            const api = window.InfoDensityReport;
+            if (!api) { showNotification('未加载 info-density-report.js', 'error'); return; }
+            const report = api.runTimelinessReport(cases);
+            lastInfoDensityReport = lastInfoDensityReport || {};
+            lastInfoDensityReport.timeliness = report;
+            document.getElementById('info-density-timeliness-summary').textContent = `新鲜 ${report.summary.fresh} / 一般 ${report.summary.normal} / 过时 ${report.summary.stale}`;
+            document.getElementById('info-density-report-type').value = 'timeliness';
+            updateInfoDensityCollectHint();
+            renderInfoDensityTable('timeliness', report);
+        }
+
+        function runDensityReport() {
+            const cases = getCasesForInfoDensity();
+            if (!cases.length) { showNotification('无案例数据', 'error'); return; }
+            const api = window.InfoDensityReport;
+            if (!api) { showNotification('未加载 info-density-report.js', 'error'); return; }
+            const report = api.runDensityReport(cases);
+            lastInfoDensityReport = lastInfoDensityReport || {};
+            lastInfoDensityReport.density = report;
+            document.getElementById('info-density-density-summary').textContent = `低 ${report.summary.low} / 中 ${report.summary.mid} / 高 ${report.summary.high}`;
+            document.getElementById('info-density-report-type').value = 'density';
+            updateInfoDensityCollectHint();
+            renderInfoDensityTable('density', report);
+        }
+
+        function runCoreDensityReport() {
+            const cases = getCasesForInfoDensity();
+            if (!cases.length) { showNotification('无案例数据', 'error'); return; }
+            const api = window.InfoDensityReport;
+            if (!api) { showNotification('未加载 info-density-report.js', 'error'); return; }
+            const report = api.runCoreCaseDensityReport(cases);
+            lastInfoDensityReport = lastInfoDensityReport || {};
+            lastInfoDensityReport.coreDensity = report;
+            document.getElementById('info-density-core-summary').textContent = `完整 ${report.summary.ok} / 部分 ${report.summary.partial} / 待补 ${report.summary.low}`;
+            document.getElementById('info-density-report-type').value = 'core';
+            updateInfoDensityCollectHint();
+            renderInfoDensityTable('core', report);
+        }
+
+        function switchInfoDensityReportView() {
+            const type = document.getElementById('info-density-report-type').value;
+            if (!lastInfoDensityReport) return;
+            if (type === 'timeliness' && lastInfoDensityReport.timeliness) renderInfoDensityTable('timeliness', lastInfoDensityReport.timeliness);
+            else if (type === 'density' && lastInfoDensityReport.density) renderInfoDensityTable('density', lastInfoDensityReport.density);
+            else if (type === 'core' && lastInfoDensityReport.coreDensity) renderInfoDensityTable('core', lastInfoDensityReport.coreDensity);
+        }
+
+        function renderInfoDensityTable(type, data) {
+            const wrap = document.getElementById('info-density-report-table-wrap');
+            if (!data || !data.items || !data.items.length) {
+                wrap.innerHTML = '<p class="text-gray-500 text-center py-8">无数据</p>';
+                return;
+            }
+            const items = data.items;
+            let headers = [];
+            if (type === 'timeliness') headers = ['caseKey', 'title', 'level', 'lastYear', 'gap', 'suggestion'];
+            else if (type === 'density') headers = ['caseKey', 'title', 'densityScore', 'missing', 'hasUserMetrics', 'hasBusinessModel', 'hasKeyMetrics'];
+            else headers = ['caseKey', 'title', 'status', 'densityScore', 'missing', 'suggestion'];
+            let html = '<table class="w-full text-sm"><thead class="bg-gray-100 sticky top-0"><tr>' + headers.map(h => `<th class="px-3 py-2 text-left font-semibold text-gray-700">${h}</th>`).join('') + '</tr></thead><tbody>';
+            items.forEach((row, i) => {
+                html += '<tr class="border-t border-gray-200 hover:bg-gray-50">';
+                headers.forEach(h => {
+                    let val = row[h];
+                    if (typeof val === 'boolean') val = val ? '是' : '否';
+                    html += `<td class="px-3 py-2 text-gray-800">${val != null ? String(val) : ''}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            wrap.innerHTML = html;
+        }
+
+        function exportInfoDensityReport() {
+            if (!lastInfoDensityReport) { showNotification('请先运行报告', 'warning'); return; }
+            const type = document.getElementById('info-density-report-type').value;
+            const data = type === 'timeliness' ? lastInfoDensityReport.timeliness : type === 'density' ? lastInfoDensityReport.density : lastInfoDensityReport.coreDensity;
+            if (!data || !data.items || !data.items.length) { showNotification('当前报告无数据', 'warning'); return; }
+            const headers = Object.keys(data.items[0]);
+            const csv = [headers.join(',')].concat(data.items.map(row => headers.map(h => '"' + String(row[h] ?? '').replace(/"/g, '""') + '"').join(','))).join('\n');
+            downloadBlob(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }), `info-density-${type}-${Date.now()}.csv`);
+            showNotification('CSV 已导出', 'success');
+        }
+
+        function exportInfoDensityReportJSON() {
+            if (!lastInfoDensityReport) { showNotification('请先运行报告', 'warning'); return; }
+            const json = JSON.stringify(lastInfoDensityReport, null, 2);
+            downloadBlob(new Blob([json], { type: 'application/json' }), `info-density-report-${Date.now()}.json`);
+            showNotification('JSON 已导出', 'success');
+        }
+
+        /** 从信息增密报告提取建议采集的 case_key 列表（缺失 user_metrics 或 business_model 或 核心案例 partial/low） */
+        function getSuggestedCollectCaseKeys() {
+            if (!lastInfoDensityReport) return [];
+            var keys = {};
+            function add(k) { if (k) keys[k] = true; }
+            if (lastInfoDensityReport.density && lastInfoDensityReport.density.items) {
+                lastInfoDensityReport.density.items.forEach(function(item) {
+                    if (!item.hasUserMetrics || !item.hasBusinessModel) add(item.caseKey);
+                });
+            }
+            if (lastInfoDensityReport.coreDensity && lastInfoDensityReport.coreDensity.items) {
+                lastInfoDensityReport.coreDensity.items.forEach(function(item) {
+                    if (item.status === 'partial' || item.status === 'low') add(item.caseKey);
+                });
+            }
+            return Object.keys(keys);
+        }
+
+        /** 根据信息增密报告建议，对建议案例执行用户数据 + 商业数据采集 */
+        async function collectSuggestedByReport() {
+            var suggested = getSuggestedCollectCaseKeys();
+            var hintEl = document.getElementById('info-density-collect-hint');
+            if (suggested.length === 0) {
+                showNotification('请先运行「信息增密」或「核心案例增密」报告，且报告中有缺失项', 'warning');
+                if (hintEl) hintEl.textContent = '请先运行上方报告，并确保有缺失 user_metrics / business_model 的案例';
+                return;
+            }
+            if (!db) {
+                showNotification('数据库未初始化，请先同步硬编码数据', 'error');
+                return;
+            }
+            if (hintEl) hintEl.textContent = '正在对 ' + suggested.length + ' 条建议案例执行采集…';
+            showSection('collect');
+            addLog('根据信息增密报告建议，对 ' + suggested.length + ' 条案例执行采集', 'info');
+            await collectUserData(suggested);
+            await collectBusinessData(suggested);
+            if (hintEl) hintEl.textContent = '已对 ' + suggested.length + ' 条建议案例执行采集，可再次运行报告查看增密结果';
+            showNotification('建议采集已完成', 'success');
+        }
+
+        function updateInfoDensityCollectHint() {
+            var suggested = getSuggestedCollectCaseKeys();
+            var hintEl = document.getElementById('info-density-collect-hint');
+            if (!hintEl) return;
+            if (suggested.length === 0) hintEl.textContent = '请先运行「信息增密」或「核心案例增密」报告';
+            else hintEl.textContent = '共 ' + suggested.length + ' 条建议可采集，点击上方按钮执行';
         }
 
         // ==================== 数据质量检查 ====================
