@@ -25,7 +25,8 @@ const communityCases = {
             { year: "2017", event: "小程序发布，构建轻应用生态，挑战App Store" },
             { year: "2018", event: "小游戏上线，\"跳一跳\"爆火，展示小程序潜力" },
             { year: "2020", event: "视频号上线，对抗抖音，布局短视频赛道" },
-            { year: "2022", event: "视频号商业化加速，推出直播带货功能" }
+            { year: "2022", event: "视频号商业化加速，推出直播带货功能" },
+            { year: "2024", event: "持续迭代视频号与小程序生态，强化商业化与创作者扶持" }
         ],
         key_decisions: [
             "早期专注熟人社交，避免与QQ正面竞争，定位为\"熟人社会的数字化映射\"",
@@ -468,7 +469,8 @@ const communityCases = {
             { year: "2017", event: "日活突破1亿，成为下沉市场第一短视频平台" },
             { year: "2018", event: "推出电商业务，探索信任电商模式" },
             { year: "2020", event: "上市，加速商业化进程" },
-            { year: "2021", event: "提出\"新市井商业\"概念，强化私域流量价值" }
+            { year: "2021", event: "提出\"新市井商业\"概念，强化私域流量价值" },
+            { year: "2024", event: "持续强化信任电商与私域，应对视频号与抖音竞争" }
         ],
         key_decisions: [
             "去中心化算法设计，让普通用户也能获得流量分配，建立\"普惠\"价值观",
@@ -565,6 +567,38 @@ const communityCases = {
                 conversion_rate: "电商转化率12%"
             }
         },
+        product_features: {
+            core_features: [
+                { name: "双列信息流", description: "双列瀑布流，用户主动选择点击，非单列沉浸", importance: "核心功能" },
+                { name: "短视频", description: "拍摄、特效、音乐、同城与关注", importance: "核心功能" },
+                { name: "直播", description: "直播打赏、 PK、带货、私域沉淀", importance: "核心功能" },
+                { name: "信任电商", description: "小店、小黄车、老铁带货与复购", importance: "核心功能" },
+                { name: "私域", description: "粉丝群、主页、直播预约与回放", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "双列与去中心化算法差异化",
+                "老铁与私域信任电商",
+                "新市井商业与普惠流量"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "推荐与去中心化分配（基尼系数控制）",
+                "直播与连麦",
+                "电商与支付",
+                "多端与同城"
+            ],
+            tech_features: [
+                "双列 Feed 与单列可选",
+                "直播带货与数据",
+                "小店与供应链"
+            ],
+            tech_challenges: [
+                "与抖音、视频号争时长与电商",
+                "一二线渗透与品牌",
+                "商业化与普惠平衡"
+            ]
+        },
         success_factors: [
             "去中心化算法设计，普惠价值观",
             "双列信息流设计，保留用户选择权",
@@ -598,7 +632,8 @@ const communityCases = {
             { year: "2019", event: "推出\"最美的夜\"跨年晚会，成功破圈，获得主流认可" },
             { year: "2020", event: "用户破2亿，知识区上线，内容多元化加速" },
             { year: "2021", event: "推出短视频功能\"Story Mode\"，探索新内容形式" },
-            { year: "2022", event: "持续破圈，但面临内容质量下降和商业化压力" }
+            { year: "2022", event: "持续破圈，但面临内容质量下降和商业化压力" },
+            { year: "2024", event: "持续优化大会员与创作激励，强化知识区与生活区内容" }
         ],
         key_decisions: [
             "弹幕系统建立独特的互动文化，让观看视频从\"独享\"变成\"共享\"，建立归属感",
@@ -1913,6 +1948,37 @@ const communityCases = {
                 cac: "约15元",
                 conversion_rate: "会员转化率8%"
             }
+        },
+        product_features: {
+            core_features: [
+                { name: "圈子", description: "兴趣圈子创建与加入，动态与讨论", importance: "核心功能" },
+                { name: "动态", description: "短图文、投票、链接分享", importance: "核心功能" },
+                { name: "即友", description: "关注、互动、即友圈", importance: "核心功能" },
+                { name: "会员", description: "即友会员、专属标识与权益", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "即友文化与平等友善",
+                "圈子与兴趣精准匹配",
+                "低商业化与社区优先"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "关注流与推荐",
+                "圈子与权限",
+                "会员与支付",
+                "多端同步"
+            ],
+            tech_features: [
+                "动态与投票",
+                "链接与摘要",
+                "消息与通知"
+            ],
+            tech_challenges: [
+                "规模与监管平衡",
+                "与微博/小红书差异化",
+                "商业化与体验"
+            ]
         },
         success_factors: [
             "从信息聚合转型社交平台",
@@ -3348,6 +3414,57 @@ const communityCases = {
                 cac: "企业销售",
                 conversion_rate: "企业采用率持续提升"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Slack", similarity: 90, position: "企业协作直接竞品" },
+                { name: "Zoom", similarity: 60, position: "会议场景竞品" },
+                { name: "Google Workspace", similarity: 85, position: "办公套件竞品" }
+            ],
+            market_position: "全球企业协作与会议市场领先（与 M365 捆绑）",
+            market_share: "企业协作市场约50%+",
+            competitive_advantages: [
+                "与 Office/M365 深度集成",
+                "企业 IT 与合规优势",
+                "Copilot AI 与规模"
+            ],
+            competitive_disadvantages: [
+                "功能臃肿、学习成本高",
+                "小团队与个人体验一般",
+                "依赖微软生态"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "频道与聊天", description: "团队频道、私聊、@与回复", importance: "核心功能" },
+                { name: "会议", description: "音视频会议、屏幕共享、录制、直播", importance: "核心功能" },
+                { name: "文件与协作", description: "与 SharePoint/OneDrive 集成、共同编辑", importance: "核心功能" },
+                { name: "应用与机器人", description: "应用商店、Power Automate、Bot", importance: "核心功能" },
+                { name: "Copilot", description: "AI 总结、问答、会议洞察", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "与 Office 无缝整合",
+                "企业级权限与合规",
+                "Copilot 与会议洞察"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时音视频与 WebRTC",
+                "与 Azure AD / M365 集成",
+                "消息与通知",
+                "多端（桌面/Web/移动）"
+            ],
+            tech_features: [
+                "频道与权限模型",
+                "会议与录制",
+                "Copilot 与 LLM"
+            ],
+            tech_challenges: [
+                "规模与多租户",
+                "与 Slack/Zoom 差异化",
+                "体验与功能平衡"
+            ]
         }
     },
     // === 阶段3新增：失败案例分析 ===
@@ -3431,6 +3548,54 @@ const communityCases = {
                 cac: "历史",
                 conversion_rate: "历史"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Facebook", similarity: 90, position: "当时主要竞品，被全面超越" },
+                { name: "Twitter", similarity: 60, position: "公开社交间接竞品" },
+                { name: "LinkedIn", similarity: 40, position: "企业/职业场景尝试竞品" }
+            ],
+            market_position: "失败案例，曾试图与 Facebook 竞争但未建立差异化",
+            market_share: "已关闭，无",
+            competitive_advantages: [
+                "曾拥有 Google 生态导流",
+                "圈子概念有创新但未普及"
+            ],
+            competitive_disadvantages: [
+                "强制整合引发反感",
+                "概念复杂、定位模糊",
+                "缺乏社区与留存"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "圈子 (Circles)", description: "将好友分组分享，概念复杂", importance: "核心功能" },
+                { name: "信息流", description: "帖子、+1、评论", importance: "核心功能" },
+                { name: "Hangouts", description: "群聊与视频通话", importance: "扩展功能" },
+                { name: "与 Gmail/YouTube 整合", description: "强制账号与产品整合", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "圈子概念（未普及）",
+                "实名与 Google 账号",
+                "企业版 G+ 尝试"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Google 账号与身份",
+                "实时与推送",
+                "与 Gmail/YouTube 数据打通"
+            ],
+            tech_features: [
+                "圈子与权限",
+                "信息流与推荐",
+                "多端"
+            ],
+            tech_challenges: [
+                "产品与运营未跟上",
+                "与 Facebook 竞争失利",
+                "已关闭"
+            ]
         }
     },
     
@@ -4125,6 +4290,56 @@ const communityCases = {
                 cac: "口碑与 SEO",
                 conversion_rate: "企业版转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Medium", similarity: 65, position: "技术写作与长文平台" },
+                { name: "Hashnode", similarity: 80, position: "开发者博客直接竞品" },
+                { name: "GitHub Blog", similarity: 50, position: "技术内容与开源" }
+            ],
+            market_position: "开发者友好技术写作社区",
+            market_share: "技术博客与写作社区份额约 15%+",
+            competitive_advantages: [
+                "Markdown 与代码高亮优先",
+                "包容性与开源（Forem）",
+                "对创作者免费，企业版 B2B"
+            ],
+            competitive_disadvantages: [
+                "与 Hashnode/Medium 争作者",
+                "内容质量参差",
+                "依赖 Forem 与社区运营"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "文章发布", description: "Markdown 编辑、代码高亮、标签与系列", importance: "核心功能" },
+                { name: "讨论", description: "文章下评论与讨论串", importance: "核心功能" },
+                { name: "Podcast", description: "播客发布与收听", importance: "扩展功能" },
+                { name: "Dev.to for Teams", description: "企业内技术博客与知识库", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "Markdown 与 Forem 开源生态",
+                "代码块与语法高亮体验",
+                "包容性社区准则"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Forem 开源栈（Rails）",
+                "Markdown 与代码高亮",
+                "邮件与通知",
+                "企业版多租户"
+            ],
+            tech_features: [
+                "插件与主题（Forem）",
+                "API 与 RSS",
+                "SEO 与发现"
+            ],
+            tech_challenges: [
+                "内容质量与推荐",
+                "与 Hashnode/Medium 差异化",
+                "企业版规模化"
+            ]
         }
     },
     
@@ -4567,6 +4782,58 @@ const communityCases = {
                 cac: "SEO 与口碑",
                 conversion_rate: "Quora+ 转化低"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Reddit", similarity: 60, position: "论坛与社区讨论" },
+                { name: "Stack Overflow", similarity: 50, position: "技术问答" },
+                { name: "知乎", similarity: 75, position: "中文问答社区" }
+            ],
+            market_position: "英文综合问答社区",
+            market_share: "问答/知识社区份额约 25%+",
+            competitive_advantages: [
+                "早期邀请制建立权威感",
+                "实名与专业身份",
+                "SEO 与长尾流量",
+                "Quora+ 与 Poe AI 探索"
+            ],
+            competitive_disadvantages: [
+                "内容农场化与质量下滑",
+                "广告与算法引发不满",
+                "被 Reddit、Stack Overflow、知乎分流"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "问答", description: "提问、回答、评论、点赞与排序", importance: "核心功能" },
+                { name: "Spaces", description: "主题社区与专栏", importance: "扩展功能" },
+                { name: "推荐与搜索", description: "算法推荐、搜索、邮件摘要", importance: "核心功能" },
+                { name: "Quora+", description: "付费订阅与作者付费墙", importance: "扩展功能" },
+                { name: "Poe", description: "多模型 AI 问答与聊天", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "问答即 SEO 与长尾流量",
+                "实名与权威背书",
+                "AI 问答（Poe）与人类回答并存"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "问答与关系图谱",
+                "推荐与搜索",
+                "广告与 Quora+ 支付",
+                "Poe 多模型接入"
+            ],
+            tech_features: [
+                "邮件摘要与推送",
+                "Spaces 与内容组织",
+                "作者统计与变现"
+            ],
+            tech_challenges: [
+                "质量与算法、广告平衡",
+                "AI 生成与人类内容区分",
+                "与 Reddit/知乎差异化"
+            ]
         }
     },
     
@@ -4690,6 +4957,39 @@ const communityCases = {
                 conversion_rate: "Premium转化率5%"
             }
         },
+        product_features: {
+            core_features: [
+                { name: "个人档案", description: "履历、技能、推荐、认证", importance: "核心功能" },
+                { name: "动态与文章", description: "职业内容、Publishing、动态流", importance: "核心功能" },
+                { name: "人脉与连接", description: "Connections 一度二度三度、InMail", importance: "核心功能" },
+                { name: "职位与招聘", description: "职位发布、Recruiter、人才搜索", importance: "核心功能" },
+                { name: "Learning", description: "在线课程与技能认证", importance: "扩展功能" },
+                { name: "Sales Navigator", description: "销售线索与 CRM 集成", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "职业身份与连接度量化",
+                "招聘与内容双轮",
+                "Microsoft 365 与 Teams 集成"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "职业图谱与推荐",
+                "招聘与人才匹配",
+                "广告与会员计费",
+                "Microsoft 身份与集成"
+            ],
+            tech_features: [
+                "多端与 API",
+                "Learning 课程与证书",
+                "Sales Navigator 与 CRM"
+            ],
+            tech_challenges: [
+                "内容与职业定位平衡",
+                "与 Indeed/Glassdoor 竞争",
+                "年轻用户与增长"
+            ]
+        },
         success_factors: [
             "职业身份定位，建立专业可信网络",
             "招聘业务为核心商业模式",
@@ -4812,6 +5112,55 @@ const communityCases = {
                 cac: "约10美元",
                 conversion_rate: "付费转化率0.1%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Twitter Spaces", similarity: 85, position: "音频房间直接竞品" },
+                { name: "Discord Stage", similarity: 70, position: "社区内语音" },
+                { name: "小宇宙/喜马拉雅", similarity: 50, position: "播客与语音" }
+            ],
+            market_position: "曾为音频社交现象级产品，现热度回落",
+            market_share: "音频社交份额被 Spaces/Discord 分流",
+            competitive_advantages: [
+                "早期邀请制与名人效应",
+                "纯音频、即来即走低压力",
+                "房间创建者自治"
+            ],
+            competitive_disadvantages: [
+                "开放后失去稀缺感",
+                "变现不清，被大平台模仿",
+                "留存与规模不足"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "语音房间", description: "创建/加入房间、举手发言、听众/主讲", importance: "核心功能" },
+                { name: "关注与发现", description: "关注人、推荐房间、日历", importance: "核心功能" },
+                { name: "Club", description: "俱乐部与 recurring 房间", importance: "扩展功能" },
+                { name: "Creator First", description: "创作者打赏与变现尝试", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "纯音频实时社交",
+                "邀请制与 FOMO 拉新",
+                "房间即来即走"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时语音与房间管理",
+                "低延迟音频传输",
+                "关注与推荐"
+            ],
+            tech_features: [
+                "多端（iOS/Android）",
+                "房间录制与回放",
+                "Club 与日历"
+            ],
+            tech_challenges: [
+                "与 Twitter Spaces/Discord 竞争",
+                "规模化与成本",
+                "变现与留存"
+            ]
         },
         success_factors: [
             "早期邀请制建立FOMO",
@@ -5263,6 +5612,56 @@ const communityCases = {
                 cac: "依赖自然与口碑",
                 conversion_rate: "付费转化极低"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "WordPress", similarity: 50, position: "博客与自建站" },
+                { name: "Medium", similarity: 55, position: "长文与博客平台" },
+                { name: "Instagram", similarity: 45, position: "视觉内容分流" }
+            ],
+            market_position: "亚文化与博客混合平台，收购后衰落",
+            market_share: "曾为头部博客/轻博客，现份额萎缩",
+            competitive_advantages: [
+                "Reblog 与病毒传播机制独特",
+                "匿名与亚文化社区氛围",
+                "多格式支持（图/文/视频/音频）"
+            ],
+            competitive_disadvantages: [
+                "被 Yahoo/Verizon/Automattic 多次易主",
+                "禁止成人内容导致核心用户流失",
+                "商业化困难，广告与订阅均不理想"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "Post", description: "多类型帖子（文字、图片、视频、音频、链接等）", importance: "核心功能" },
+                { name: "Reblog", description: "转发与二次传播，带评论链", importance: "核心功能" },
+                { name: "Blog", description: "个人博客主页与时间线", importance: "核心功能" },
+                { name: "Follow", description: "关注博主与时间线", importance: "核心功能" },
+                { name: "Post+", description: "付费订阅与会员专享内容", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "Reblog 链式传播与社区文化",
+                "匿名与亚文化友好",
+                "多格式一站式发布"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "大规模博客与媒体托管",
+                "时间线聚合与推荐",
+                "多格式内容存储与 CDN"
+            ],
+            tech_features: [
+                "Reblog 与引用链",
+                "主题与自定义",
+                "API 与第三方客户端"
+            ],
+            tech_challenges: [
+                "收购后投入不足与创新停滞",
+                "内容政策与用户信任",
+                "商业化与留存平衡"
+            ]
         }
     },
     pinterest: {
@@ -5377,6 +5776,38 @@ const communityCases = {
                 cac: "约15美元",
                 conversion_rate: "电商转化率2%"
             }
+        },
+        product_features: {
+            core_features: [
+                { name: "Pin", description: "单张图片或短视频的收藏单元，可链接到商品或网页", importance: "核心功能" },
+                { name: "Board", description: "用户创建的收藏夹，按主题组织 Pin", importance: "核心功能" },
+                { name: "视觉发现", description: "首页与搜索以图为主，算法推荐灵感流", importance: "核心功能" },
+                { name: "Buyable Pins", description: "可直接购买的商品 Pin，缩短从灵感到下单路径", importance: "核心功能" },
+                { name: "Idea Pins", description: "多页图文/短视频，创作者故事与教程", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "Board 虚拟剪贴板心智，与搜索/社交形成差异化",
+                "视觉优先发现，离消费决策近",
+                "Promoted Pins 与电商佣金结合"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "图像识别与视觉搜索",
+                "推荐算法与个性化 Feed",
+                "电商与商品图谱",
+                "多端同步（Web/App）"
+            ],
+            tech_features: [
+                "以图搜图与相似 Pin 推荐",
+                "Board 协作与分享",
+                "购物车与结账集成"
+            ],
+            tech_challenges: [
+                "与 Instagram/TikTok 争用户时长",
+                "电商转化率与广告负载平衡",
+                "内容多样性避免同质化"
+            ]
         },
         success_factors: [
             "Board系统独特，组织收藏",
@@ -5503,6 +5934,39 @@ const communityCases = {
                 conversion_rate: "电商转化率3%"
             }
         },
+        product_features: {
+            core_features: [
+                { name: "Feed 信息流", description: "图文与 Reels 混合流，算法推荐为主", importance: "核心功能" },
+                { name: "Stories", description: "24 小时可见的图文/短视频，阅后即焚式", importance: "核心功能" },
+                { name: "Reels", description: "竖屏短视频，全屏沉浸与算法分发", importance: "核心功能" },
+                { name: "滤镜与编辑", description: "拍照滤镜、贴纸、Boomerang 等", importance: "核心功能" },
+                { name: "购物与标签", description: "商品标签、购物袋、直播带货", importance: "扩展功能" },
+                { name: "DM", description: "私信与群聊，支持图文与语音", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "方形图片与滤镜建立视觉社交心智",
+                "Stories 快速模仿 Snapchat 并反超",
+                "Reels 对抗 TikTok 的短视频布局"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "图像/视频处理与压缩",
+                "推荐算法与 Feed 排序",
+                "AR 滤镜与效果",
+                "Meta 广告与归因体系"
+            ],
+            tech_features: [
+                "多格式支持（图/视频/Stories/Reels）",
+                "实时协作与直播",
+                "购物与支付集成"
+            ],
+            tech_challenges: [
+                "Reels 与 TikTok 内容质量与创作者激励",
+                "算法透明度与用户信任",
+                "电商与内容体验平衡"
+            ]
+        },
         success_factors: [
             "滤镜系统降低创作门槛",
             "图片优先设计，视觉美感",
@@ -5595,8 +6059,62 @@ const communityCases = {
                 arpu: "约12美元/年",
                 ltv: "中高",
                 cac: "品牌与年轻用户",
-                conversion_rate: "广告与电商"
+                conversion_rate: "Snapchat+ 与 AR 转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Instagram", similarity: 75, position: "Stories 与 Reels 直接竞品" },
+                { name: "TikTok", similarity: 55, position: "Spotlight 短视频竞品" },
+                { name: "WhatsApp", similarity: 40, position: "私密通讯间接竞品" }
+            ],
+            market_position: "Z 世代与年轻用户私密社交领导者",
+            market_share: "年轻用户视觉社交份额约 30%+",
+            competitive_advantages: [
+                "阅后即焚与私密心智强",
+                "AR 滤镜与镜头生态领先",
+                "年轻用户占比高，广告价值大",
+                "Stories 原创者，后被模仿"
+            ],
+            competitive_disadvantages: [
+                "Instagram Stories 模仿导致增长放缓",
+                "Spotlight 难以与 TikTok 抗衡",
+                "界面改版曾引发流失",
+                "盈利依赖广告，亏损曾长期存在"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "Snap 消息", description: "一对一或群组阅后即焚消息，图文视频", importance: "核心功能" },
+                { name: "Stories", description: "24 小时可见的 Stories，好友与公开 Discover", importance: "核心功能" },
+                { name: "AR 镜头", description: "Lenses 滤镜与 AR 特效，UGC 与品牌镜头", importance: "核心功能" },
+                { name: "Spotlight", description: "竖屏短视频流，算法推荐", importance: "扩展功能" },
+                { name: "Discover", description: "媒体与创作者内容频道", importance: "扩展功能" },
+                { name: "Map", description: "好友位置与地点 Stories", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "阅后即焚降低社交压力",
+                "AR 镜头与 Landmarker 等技术创新",
+                "Stories 形态被行业广泛模仿"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "AR 与计算机视觉（Lenses）",
+                "端到端加密与消息同步",
+                "实时视频与图像处理",
+                "Spectacles 等硬件"
+            ],
+            tech_features: [
+                "多端同步（手机、Web、Spectacles）",
+                "AR 创作与分发平台",
+                "广告与测量（Snap Pixel）"
+            ],
+            tech_challenges: [
+                "与 Meta 系在 Stories 与广告上竞争",
+                "Spotlight 与 TikTok 算法与内容差距",
+                "盈利与亏损平衡"
+            ]
         }
     },
     twitter: {
@@ -5713,6 +6231,38 @@ const communityCases = {
                 conversion_rate: "Premium转化率1%"
             }
         },
+        product_features: {
+            core_features: [
+                { name: "Tweet", description: "短文本推文，原 140 字后扩展至 280 字", importance: "核心功能" },
+                { name: "时间线", description: "关注流与 For You 算法流双模式", importance: "核心功能" },
+                { name: "Spaces", description: "语音直播聊天室", importance: "扩展功能" },
+                { name: "DM", description: "私信与群聊", importance: "核心功能" },
+                { name: "X Premium", description: "付费认证、长文、广告分成等", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "140/280 字限制形成短文本文化",
+                "公开默认与实时性建立公共广场",
+                "Spaces 与长文扩展形态"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时消息与 Feed 排序",
+                "大规模分布式时间线",
+                "Spaces 实时音频",
+                "广告与推荐系统"
+            ],
+            tech_features: [
+                "API 与开发者生态（曾开放后收紧）",
+                "搜索与趋势",
+                "蓝V 与 Premium 订阅"
+            ],
+            tech_challenges: [
+                "与 Bluesky/Threads 竞争",
+                "内容审核与政策一致性",
+                "盈利与用户体验平衡"
+            ]
+        },
         success_factors: [
             "140字限制降低表达门槛",
             "公开默认，建立公共广场定位",
@@ -5809,6 +6359,60 @@ const communityCases = {
                 cac: "作者自带读者",
                 conversion_rate: "免费转付费因作者而异"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Ghost", similarity: 85, position: "开源 Newsletter 平台直接竞品" },
+                { name: "Beehiiv", similarity: 80, position: "Newsletter 增长与变现工具" },
+                { name: "Patreon", similarity: 50, position: "创作者订阅间接竞品" },
+                { name: "Medium", similarity: 40, position: "长文与会员间接竞品" }
+            ],
+            market_position: "Newsletter 订阅平台领导者",
+            market_share: "付费 Newsletter 市场约 40%+",
+            competitive_advantages: [
+                "作者拥有订阅者列表与内容，去中心化信任",
+                "邮件分发绕过算法，直接触达读者",
+                "10% 抽成相对克制，创作者友好",
+                "Substack Pro 吸引头部作者，内容质量高"
+            ],
+            competitive_disadvantages: [
+                "Notes 等社交化尝试稀释核心定位",
+                "与 Ghost/Beehiiv 竞争作者与读者",
+                "平台抽成仍被部分作者诟病",
+                "依赖头部作者，长尾作者变现难"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "Newsletter 发布", description: "邮件订阅与推送，支持图文与富媒体", importance: "核心功能" },
+                { name: "付费墙", description: "免费/付费订阅分级，作者自主定价", importance: "核心功能" },
+                { name: "订阅者管理", description: "作者拥有列表，可导出与迁移", importance: "核心功能" },
+                { name: "Substack Audio", description: "播客与音频内容发布与订阅", importance: "扩展功能" },
+                { name: "Notes", description: "短文本社交动态，类似推文", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "邮件优先分发，绕过平台算法",
+                "作者完全控制权与数据可迁移",
+                "Substack Pro 预付款吸引头部作者"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "邮件发送与订阅管理",
+                "支付与订阅计费（Stripe 等）",
+                "Web 与移动端阅读",
+                "音频托管与播客 RSS"
+            ],
+            tech_features: [
+                "无算法推荐，邮件与 RSS 驱动",
+                "作者后台与数据分析",
+                "Notes 时间线与社交图谱"
+            ],
+            tech_challenges: [
+                "规模化邮件送达与反垃圾",
+                "付费转化与留存分析",
+                "Notes 与核心 Newsletter 体验平衡"
+            ]
         }
     },
     figma: {
@@ -6084,6 +6688,58 @@ const communityCases = {
                 cac: "口碑与赛事",
                 conversion_rate: "免费转付费约5%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Garmin Connect", similarity: 60, position: "运动手表与数据" },
+                { name: "Nike Run Club", similarity: 50, position: "跑步与品牌" },
+                { name: "Peloton", similarity: 40, position: "室内健身与订阅" }
+            ],
+            market_position: "运动社交与户外运动数据领导者",
+            market_share: "运动社交/户外记录市场约 40%+",
+            competitive_advantages: [
+                "Segment 与 KOM 游戏化竞争",
+                "跑步与骑行垂直深耕",
+                "俱乐部与挑战增强粘性",
+                "Strava Metro B2B 数据价值"
+            ],
+            competitive_disadvantages: [
+                "数据隐私与位置泄露担忧",
+                "免费转付费率有限",
+                "与 Garmin/Apple 等设备生态竞争"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "活动记录", description: "GPS 运动记录、心率、功率等数据同步", importance: "核心功能" },
+                { name: "Segment", description: "路段创建与 KOM/PR 竞争排名", importance: "核心功能" },
+                { name: "Feed", description: "关注流与活动动态、点赞评论", importance: "核心功能" },
+                { name: "俱乐部与挑战", description: "俱乐部、月度挑战、徽章", importance: "扩展功能" },
+                { name: "Strava Metro", description: "匿名聚合数据供城市规划 B2B", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "Segment 与 KOM 游戏化",
+                "运动数据即社交货币",
+                "隐私区域与数据控制"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "GPS 与多设备数据同步（Garmin、Apple 等）",
+                "地图与路线渲染",
+                "订阅与支付",
+                "B2B 数据聚合与脱敏"
+            ],
+            tech_features: [
+                "API 与第三方接入",
+                "热力图与全球 Segment",
+                "移动端与 Web 分析"
+            ],
+            tech_challenges: [
+                "隐私与位置数据安全",
+                "免费版与付费版功能边界",
+                "与硬件厂商数据合作与竞争"
+            ]
         }
     },
     nextdoor: {
@@ -6174,6 +6830,57 @@ const communityCases = {
                 cac: "本地推广",
                 conversion_rate: "本地广告转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Facebook Groups", similarity: 65, position: "群组与本地讨论" },
+                { name: "Citizen", similarity: 40, position: "邻里安全与警报" },
+                { name: "Ring Neighbors", similarity: 45, position: "安防与邻里" }
+            ],
+            market_position: "美国本地邻里社区网络领导者",
+            market_share: "美国本地社区网络约 70%+ 覆盖",
+            competitive_advantages: [
+                "基于地理的邻里验证与归属",
+                "本地商家广告价值高",
+                "二手、求助、推荐等实用信息",
+                "疫情后邻里互助心智强化"
+            ],
+            competitive_disadvantages: [
+                "种族歧视与偏见内容损害声誉",
+                "内容审核与社区治理难",
+                "增长与盈利压力"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "邻里动态", description: "基于地理的帖子流，求助、推荐、二手、安全", importance: "核心功能" },
+                { name: "邻里验证", description: "地址验证加入社区，减少虚假", importance: "核心功能" },
+                { name: "本地商家", description: "本地商家主页与广告", importance: "扩展功能" },
+                { name: "分类与市场", description: "二手、租房、服务推荐", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "地理位置即社区边界",
+                "邻里自治与平台审核结合",
+                "本地广告与高信任场景"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "地理位置与社区边界",
+                "内容审核与 AI 检测",
+                "本地广告与定向",
+                "移动端与推送"
+            ],
+            tech_features: [
+                "邻里审查与举报",
+                "本地商家后台",
+                "邮件与 App 通知"
+            ],
+            tech_challenges: [
+                "偏见与歧视内容识别与处置",
+                "自治与平台责任的边界",
+                "盈利与用户体验平衡"
+            ]
         }
     },
     roblox: {
@@ -6455,6 +7162,57 @@ const communityCases = {
                 cac: "依赖自然迁移与口碑",
                 conversion_rate: "N/A"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Bluesky", similarity: 80, position: "开放协议与去中心化社交" },
+                { name: "Twitter/X", similarity: 70, position: "中心化短文本" },
+                { name: "Threads", similarity: 65, position: "Meta 系替代" }
+            ],
+            market_position: "联邦制去中心化社交的标杆",
+            market_share: "联邦/去中心化社交用户约 1000 万+（全实例）",
+            competitive_advantages: [
+                "ActivityPub 协议与 Fediverse 互操作",
+                "服务器自治与规则多样性",
+                "开源与无平台抽成",
+                "隐私与数据可控"
+            ],
+            competitive_disadvantages: [
+                "选实例与迁移门槛高",
+                "体验不一致与生态分散",
+                "无统一商业化，实例可持续性参差"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "Toot", description: "500 字内短文本，支持 CW、投票、多图", importance: "核心功能" },
+                { name: "时间线", description: "首页、本地、联邦、列表多时间线", importance: "核心功能" },
+                { name: "实例与迁移", description: "选实例注册、账号迁移", importance: "核心功能" },
+                { name: "静音与过滤", description: "静音词、过滤、内容警告 CW", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "联邦制与 ActivityPub",
+                "实例自治与规则透明",
+                "无算法推荐（时间序为主）"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "ActivityPub 协议与 Fediverse",
+                "Ruby on Rails（官方实例）",
+                "多实例与联邦同步",
+                "REST API 与 OAuth"
+            ],
+            tech_features: [
+                "多客户端（Web、移动、第三方）",
+                "实例间转发与回复",
+                "导入导出与迁移"
+            ],
+            tech_challenges: [
+                "新用户选实例与引导",
+                "实例稳定性与捐赠可持续",
+                "与 Bluesky/Threads 易用性竞争"
+            ]
         }
     },
     onlyfans: {
@@ -6553,6 +7311,58 @@ const communityCases = {
                 cac: "依赖创作者自带流量",
                 conversion_rate: "付费订阅转化因创作者而异"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Fansly", similarity: 85, position: "创作者订阅直接竞品" },
+                { name: "Patreon", similarity: 60, position: "创作者经济，非成人为主" },
+                { name: "FANVUE", similarity: 70, position: "创作者订阅与成人内容" }
+            ],
+            market_position: "创作者订阅与成人内容平台领导者",
+            market_share: "创作者订阅/成人内容份额约 50%+",
+            competitive_advantages: [
+                "20% 抽成创作者拿 80%",
+                "创作者完全控制内容与定价",
+                "订阅+单条付费+小费灵活",
+                "支付与风控基础设施"
+            ],
+            competitive_disadvantages: [
+                "支付渠道与合规风险",
+                "监管与品牌压力",
+                "依赖成人内容，多元化受限"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "订阅", description: "月付/年付订阅创作者，看时间线内容", importance: "核心功能" },
+                { name: "按条付费", description: "PPV 单条内容付费与消息付费", importance: "核心功能" },
+                { name: "小费", description: "打赏与 Tips", importance: "核心功能" },
+                { name: "消息", description: "创作者与粉丝私信，可付费解锁", importance: "核心功能" },
+                { name: "OnlyFans TV", description: "直播与长视频", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "创作者主权与 80% 分成",
+                "订阅+PPV+小费组合",
+                "成人内容与支付合规平衡"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "支付与分账（多渠道）",
+                "内容托管与审核",
+                "订阅与计费",
+                "消息与通知"
+            ],
+            tech_features: [
+                "创作者后台与数据",
+                "多币种与税务",
+                "合规与年龄验证"
+            ],
+            tech_challenges: [
+                "支付渠道稳定性与合规",
+                "内容审核与法律边界",
+                "品牌与主流渠道合作"
+            ]
         }
     },
     
@@ -6652,6 +7462,60 @@ const communityCases = {
                 cac: "品牌与效果广告获客",
                 conversion_rate: "广告转化与电商导流"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "TikTok", similarity: 50, position: "短视频与年轻用户分流" },
+                { name: "微信", similarity: 55, position: "中国区超级应用" },
+                { name: "YouTube", similarity: 45, position: "视频与时长竞争" }
+            ],
+            market_position: "全球最大社交网络（Meta 系）",
+            market_share: "全球社交网络 MAU 约 30 亿+（含 Instagram、WhatsApp）",
+            competitive_advantages: [
+                "规模与网络效应极强",
+                "广告与数据精准投放成熟",
+                "收购 Instagram、WhatsApp 形成产品矩阵",
+                "群组与 Marketplace 高粘性"
+            ],
+            competitive_disadvantages: [
+                "用户老龄化，年轻用户流向 TikTok",
+                "隐私与信任危机（剑桥分析等）",
+                "元宇宙投入大、回报低",
+                "监管与反垄断压力"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "News Feed", description: "信息流，算法推荐为主，图文视频混合", importance: "核心功能" },
+                { name: "Stories", description: "24 小时可见的短视频/图状态", importance: "核心功能" },
+                { name: "Groups", description: "公开/私密群组，讨论与社区", importance: "核心功能" },
+                { name: "Marketplace", description: "本地二手与商品交易", importance: "扩展功能" },
+                { name: "Watch", description: "短视频与长视频，与 Reels 整合", importance: "扩展功能" },
+                { name: "Messenger", description: "私信与语音视频通话（独立 App）", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "News Feed 算法与精准广告",
+                "实名制与社交图谱",
+                "开放平台与收购生态"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "大规模推荐与 Feed 排序",
+                "广告投放与归因系统",
+                "多产品数据打通（Meta 系）",
+                "AI 与内容审核"
+            ],
+            tech_features: [
+                "Graph API 与开放平台（曾开放后收紧）",
+                "直播与视频基础设施",
+                "端到端加密（Messenger 可选）"
+            ],
+            tech_challenges: [
+                "与 TikTok 争年轻用户与时长",
+                "隐私合规与数据使用",
+                "虚假信息与内容安全"
+            ]
         }
     },
     whatsapp: {
@@ -6744,6 +7608,60 @@ const communityCases = {
                 cac: "自然增长与 Meta 导流",
                 conversion_rate: "企业端转化依赖行业"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Telegram", similarity: 85, position: "加密与多端即时通讯" },
+                { name: "Signal", similarity: 75, position: "隐私优先加密通讯" },
+                { name: "微信", similarity: 70, position: "中国区超级应用" },
+                { name: "iMessage", similarity: 60, position: "苹果生态内通讯" }
+            ],
+            market_position: "全球最大即时通讯应用（按用户数）",
+            market_share: "全球 IM MAU 约 20 亿+",
+            competitive_advantages: [
+                "端到端加密与无广告承诺",
+                "新兴市场渗透深、低带宽友好",
+                "WhatsApp Business 与支付生态",
+                "Meta 资源与基础设施"
+            ],
+            competitive_disadvantages: [
+                "隐私政策争议导致部分用户迁往 Signal/Telegram",
+                "商业化与「无广告」平衡难",
+                "部分地区监管与封禁风险"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "消息", description: "文字、语音、图片、视频、文档，端到端加密", importance: "核心功能" },
+                { name: "语音/视频通话", description: "一对一与群组通话", importance: "核心功能" },
+                { name: "Status", description: "24 小时可见状态（图/视频），类似 Stories", importance: "核心功能" },
+                { name: "WhatsApp Business", description: "企业号、目录、快捷回复、API", importance: "扩展功能" },
+                { name: "WhatsApp Pay", description: "印度等市场内支付与转账", importance: "扩展功能" },
+                { name: "Community", description: "社区与子群组管理", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "端到端加密默认开启",
+                "无广告、订阅制转免费",
+                "低带宽与弱网优化"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Signal Protocol 端到端加密",
+                "分布式消息同步与多端",
+                "低带宽压缩与媒体处理",
+                "企业 API 与云托管"
+            ],
+            tech_features: [
+                "多设备链接（非多端独立登录）",
+                "备份与迁移（可选端到端加密）",
+                "语音视频与群组通话"
+            ],
+            tech_challenges: [
+                "隐私政策与元数据争议",
+                "与 Signal/Telegram 的隐私叙事竞争",
+                "B2B 与支付合规各地差异"
+            ]
         }
     },
     line: {
@@ -6852,6 +7770,58 @@ const communityCases = {
                 cac: "品牌与本地运营",
                 conversion_rate: "贴图与支付转化良好"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "微信", similarity: 70, position: "中国区超级应用，东南亚竞争" },
+                { name: "WhatsApp", similarity: 55, position: "即时通讯与海外市场" },
+                { name: "Messenger", similarity: 50, position: "全球 IM" }
+            ],
+            market_position: "日本与台湾市场即时通讯与超级应用领导者",
+            market_share: "日本 IM 份额约 90%+，台湾约 80%+",
+            competitive_advantages: [
+                "Line Friends IP 与贴图文化",
+                "支付与生活服务本地化深",
+                "时间线、新闻、游戏等一体化",
+                "日本/台湾运营与品牌强"
+            ],
+            competitive_disadvantages: [
+                "主要市场增长见顶",
+                "全球化有限，依赖日台泰印尼",
+                "与微信/WhatsApp 在东南亚竞争"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "消息与通话", description: "文字、贴图、语音、视频通话，一对一与群聊", importance: "核心功能" },
+                { name: "贴图与 Line Friends", description: "付费/免费贴图、主题、IP 表情包", importance: "核心功能" },
+                { name: "时间线", description: "动态与资讯流，关注公众号与好友", importance: "核心功能" },
+                { name: "Line Pay", description: "支付、转账、线下扫码与电商", importance: "扩展功能" },
+                { name: "Line News / 游戏 / 音乐", description: "资讯、轻游戏、音乐等增值", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "Line Friends 表情包 IP 与衍生",
+                "超级应用一站式（通讯+支付+内容）",
+                "本地化运营与节日营销"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "即时通讯与多端同步",
+                "支付与风控系统",
+                "贴图与媒体 CDN",
+                "公众号与推送"
+            ],
+            tech_features: [
+                "Line Login 第三方登录",
+                "Line Beacon 与线下场景",
+                "广告与 Business 后台"
+            ],
+            tech_challenges: [
+                "日台以外市场获客与留存",
+                "与微信/WhatsApp 功能重叠竞争",
+                "增长与变现平衡"
+            ]
         }
     },
     tiktok: {
@@ -6932,6 +7902,58 @@ const communityCases = {
                 cac: "自然与付费获客",
                 conversion_rate: "电商与广告转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "YouTube Shorts", similarity: 80, position: "短视频直接竞品" },
+                { name: "Instagram Reels", similarity: 75, position: "短视频直接竞品" },
+                { name: "快手", similarity: 70, position: "中国区短视频" }
+            ],
+            market_position: "全球短视频与娱乐消费领导者",
+            market_share: "全球短视频 MAU 约 10 亿+，时长领先",
+            competitive_advantages: [
+                "算法推荐与沉浸体验极强",
+                "创作者生态与商业化（直播、电商）",
+                "全球化与本地运营结合",
+                "音乐与挑战赛文化"
+            ],
+            competitive_disadvantages: [
+                "地缘政治与多国监管/封禁风险",
+                "内容审核与青少年保护压力",
+                "与 Meta/Google 竞争加剧"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "For You 信息流", description: "全屏竖屏短视频，算法推荐为主", importance: "核心功能" },
+                { name: "创作工具", description: "拍摄、剪辑、特效、音乐、绿幕", importance: "核心功能" },
+                { name: "直播", description: "打赏、连麦、电商带货", importance: "核心功能" },
+                { name: "TikTok Shop", description: "站内电商与闭环转化", importance: "扩展功能" },
+                { name: "Duet / Stitch", description: "合拍与二次创作", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "全屏沉浸与算法强绑定",
+                "音乐与挑战赛驱动传播",
+                "直播打赏与电商一体化"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "推荐算法与个性化排序",
+                "实时视频处理与特效",
+                "直播与连麦基础设施",
+                "电商与支付对接"
+            ],
+            tech_features: [
+                "多地区数据中心与合规",
+                "内容审核与安全（人+AI）",
+                "创作者后台与数据分析"
+            ],
+            tech_challenges: [
+                "各国数据本地化与合规",
+                "与 YouTube Shorts/Reels 争创作者与时长",
+                "电商与广告负载平衡"
+            ]
         }
     },
     signal: {
@@ -7017,6 +8039,57 @@ const communityCases = {
                 cac: "口碑与隐私事件驱动迁移",
                 conversion_rate: "N/A"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "WhatsApp", similarity: 75, position: "主流 IM，隐私政策争议时迁入 Signal" },
+                { name: "Telegram", similarity: 70, position: "加密与多端 IM" },
+                { name: "iMessage", similarity: 50, position: "苹果生态内通讯" }
+            ],
+            market_position: "隐私优先加密通讯的标杆产品",
+            market_share: "加密 IM 用户约 4000 万+，份额有限",
+            competitive_advantages: [
+                "Signal Protocol 开源与行业采用",
+                "非营利与无广告，信任度高",
+                "元数据最小化与开源透明",
+                "记者与高敏感用户首选"
+            ],
+            competitive_disadvantages: [
+                "网络效应弱，熟人迁移成本高",
+                "无商业化，依赖捐赠可持续性存疑",
+                "功能与生态不如 WhatsApp/Telegram"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "加密消息", description: "端到端加密文字、图片、视频、语音消息", importance: "核心功能" },
+                { name: "语音/视频通话", description: "端到端加密一对一通话", importance: "核心功能" },
+                { name: "阅后即焚", description: "定时消失的消息与对话", importance: "核心功能" },
+                { name: "Stories", description: "24 小时可见状态（可选）", importance: "扩展功能" },
+                { name: "群组", description: "加密群聊与群组管理", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "Signal Protocol 成行业标准（WhatsApp 等采用）",
+                "元数据最小化设计",
+                "非营利与捐赠模式"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Signal Protocol（双棘轮等）端到端加密",
+                "开源客户端（Android/iOS/Desktop）",
+                "服务器仅中继，不存明文"
+            ],
+            tech_features: [
+                "多设备链接（需主设备在线）",
+                "安全号码变更与迁移",
+                "可选用户名（不暴露手机号）"
+            ],
+            tech_challenges: [
+                "规模化与捐赠可持续性",
+                "与 WhatsApp/Telegram 功能与生态差距",
+                "合规与政府请求的平衡"
+            ]
         }
     },
     weibo: {
@@ -7036,7 +8109,8 @@ const communityCases = {
             { year: "2009", event: "微博上线，类似Twitter" },
             { year: "2011", event: "用户数突破1亿" },
             { year: "2014", event: "上市" },
-            { year: "2020", event: "内容审核加强" }
+            { year: "2020", event: "内容审核加强" },
+            { year: "2024", event: "持续强化热点与明星生态，探索视频与电商联动" }
         ],
         key_decisions: [
             "早期模仿Twitter成功",
@@ -7095,6 +8169,58 @@ const communityCases = {
                 cac: "品牌与效果",
                 conversion_rate: "广告与电商导流"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "抖音", similarity: 55, position: "短视频与时长分流" },
+                { name: "微信", similarity: 50, position: "朋友圈与公众号分流" },
+                { name: "小红书", similarity: 45, position: "种草与年轻用户" }
+            ],
+            market_position: "中国公共社交媒体与热点平台",
+            market_share: "中国公开社交/热点市场约 30%+",
+            competitive_advantages: [
+                "热搜与话题驱动，公共讨论心智强",
+                "明星、KOL、品牌集中",
+                "广告与会员变现成熟",
+                "短文本与多媒体结合"
+            ],
+            competitive_disadvantages: [
+                "内容审核严，表达受限",
+                "年轻用户流向抖音、小红书",
+                "增长见顶，DAU 承压"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "微博", description: "短文本与图文、视频、话题发布", importance: "核心功能" },
+                { name: "热搜", description: "实时热搜榜与话题聚合", importance: "核心功能" },
+                { name: "关注流", description: "关注人时间线 + 算法推荐", importance: "核心功能" },
+                { name: "微博会员", description: "会员特权、数据服务、去广告", importance: "扩展功能" },
+                { name: "直播与视频号", description: "直播、长视频与短视频", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "热搜与公共事件传播",
+                "明星与 KOL 生态",
+                "140 字短文本降低门槛"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "大规模 Feed 与热搜实时计算",
+                "内容审核与安全（人+AI）",
+                "多端与 CDN",
+                "广告与数据服务"
+            ],
+            tech_features: [
+                "话题与热搜聚合",
+                "会员与数据后台",
+                "直播与视频基础设施"
+            ],
+            tech_challenges: [
+                "审核与表达边界",
+                "与抖音/小红书争用户时长",
+                "增长与变现平衡"
+            ]
         }
     },
     qq: {
@@ -7115,7 +8241,8 @@ const communityCases = {
             { year: "2005", event: "QQ空间上线" },
             { year: "2010", event: "同时在线用户突破1亿" },
             { year: "2011", event: "微信上线，开始分流" },
-            { year: "2020", event: "用户数下降" }
+            { year: "2020", event: "用户数下降" },
+            { year: "2024", event: "持续服务年轻与游戏用户，与微信形成差异化定位" }
         ],
         key_decisions: [
             "早期建立用户习惯",
@@ -7175,6 +8302,57 @@ const communityCases = {
                 cac: "品牌与校园",
                 conversion_rate: "会员与游戏转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "微信", similarity: 75, position: "中国区即时通讯与超级应用" },
+                { name: "钉钉", similarity: 40, position: "办公与学习场景" },
+                { name: "Discord", similarity: 45, position: "年轻用户与群组" }
+            ],
+            market_position: "中国 PC 与年轻用户即时通讯与娱乐入口",
+            market_share: "中国 IM 与 QQ 生态约 30%+（被微信分流后）",
+            competitive_advantages: [
+                "QQ 号与等级体系心智强",
+                "QQ 空间与群、游戏生态",
+                "会员与虚拟物品变现成熟",
+                "学生与年轻用户留存"
+            ],
+            competitive_disadvantages: [
+                "被微信分流，用户老龄化",
+                "移动端心智弱于微信",
+                "增长见顶"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "消息与群", description: "一对一、群聊、语音视频、文件", importance: "核心功能" },
+                { name: "QQ 空间", description: "动态、相册、访客、装扮", importance: "核心功能" },
+                { name: "会员与装扮", description: "黄钻绿钻、主题、气泡、挂件", importance: "核心功能" },
+                { name: "游戏与小程序", description: "游戏中心、QQ 小程序", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "QQ 号与等级游戏化",
+                "QQ 空间社交与表达",
+                "会员与虚拟物品体系"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "多端同步与消息",
+                "关系链与群组",
+                "支付与会员计费",
+                "游戏分发与 SDK"
+            ],
+            tech_features: [
+                "QQ 互联与第三方登录",
+                "群文件与协作",
+                "表情与装扮生态"
+            ],
+            tech_challenges: [
+                "与微信争用户时长与心智",
+                "年轻用户与校园留存",
+                "商业化与体验平衡"
+            ]
         }
     },
     myspace: {
@@ -7260,6 +8438,54 @@ const communityCases = {
                 cac: "历史",
                 conversion_rate: "历史"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Facebook", similarity: 85, position: "当时主要竞品，被超越" },
+                { name: "Friendster", similarity: 70, position: "早期社交竞品" },
+                { name: "Hi5", similarity: 60, position: "同期社交竞品" }
+            ],
+            market_position: "失败案例，曾为全球最大社交网络之一，后被 Facebook 替代",
+            market_share: "已衰落，历史",
+            competitive_advantages: [
+                "早期个性化与音乐人生态",
+                "年轻用户与音乐场景"
+            ],
+            competitive_disadvantages: [
+                "体验与性能落后",
+                "被收购后创新停滞",
+                "数据管理失误"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "个人主页", description: "自定义布局、背景、音乐播放器", importance: "核心功能" },
+                { name: "好友与留言", description: "Top 8 好友、留言板、评论", importance: "核心功能" },
+                { name: "音乐人页面", description: "音乐人入驻、歌曲播放、推广", importance: "核心功能" },
+                { name: "Bulletin", description: "类似状态与广播", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "个性化主页与 Top 8",
+                "音乐人生态",
+                "早期社交图谱"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Web 前端与自定义 CSS",
+                "音乐流媒体嵌入",
+                "好友与消息"
+            ],
+            tech_features: [
+                "个人主页渲染",
+                "音乐播放与存储",
+                "多租户与规模"
+            ],
+            tech_challenges: [
+                "性能与可扩展性",
+                "数据迁移与保留（曾丢失）",
+                "已衰落"
+            ]
         }
     },
     vine: {
@@ -7343,6 +8569,53 @@ const communityCases = {
                 cac: "历史",
                 conversion_rate: "历史"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Instagram", similarity: 85, position: "短视频与 Stories 竞品" },
+                { name: "Snapchat", similarity: 80, position: "短视频与年轻用户竞品" },
+                { name: "TikTok/Musical.ly", similarity: 70, position: "后继短视频平台" }
+            ],
+            market_position: "失败案例，曾为 6 秒短视频标杆，被 Twitter 关闭",
+            market_share: "已关闭，无",
+            competitive_advantages: [
+                "6 秒限制创造独特创意",
+                "曾拥有大量创作者与用户"
+            ],
+            competitive_disadvantages: [
+                "Twitter 未有效运营与变现",
+                "被 Instagram/Snapchat 分流",
+                "商业模式未建立"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "6 秒循环视频", description: "仅 6 秒、循环播放、竖屏", importance: "核心功能" },
+                { name: "发现与关注", description: "探索页、关注流、点赞评论", importance: "核心功能" },
+                { name: "创作工具", description: "简单剪辑、无复杂特效", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "6 秒限制激发创意",
+                "循环播放与传播",
+                "早期短视频形态"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "短视频录制与编码",
+                "循环播放与推荐",
+                "多端"
+            ],
+            tech_features: [
+                "6 秒约束与上传",
+                "发现与关注流",
+                "与 Twitter 账号整合"
+            ],
+            tech_challenges: [
+                "变现与留存",
+                "与 Instagram 竞争",
+                "已关闭"
+            ]
         }
     },
     periscope: {
@@ -7426,6 +8699,53 @@ const communityCases = {
                 cac: "历史",
                 conversion_rate: "历史"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Facebook Live", similarity: 90, position: "直播直接竞品，后主导市场" },
+                { name: "Instagram Live", similarity: 85, position: "直播竞品" },
+                { name: "YouTube Live", similarity: 70, position: "直播与长尾竞品" }
+            ],
+            market_position: "失败案例，曾为移动直播先行者，被 Twitter 关闭",
+            market_share: "已关闭，无",
+            competitive_advantages: [
+                "早期移动直播体验",
+                "与 Twitter 整合"
+            ],
+            competitive_disadvantages: [
+                "Twitter 自有直播替代",
+                "变现与留存不足",
+                "被大平台复制"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "实时直播", description: "一键开播、弹幕、爱心与评论", importance: "核心功能" },
+                { name: "发现与关注", description: "地图发现、关注流、回放", importance: "核心功能" },
+                { name: "互动", description: "弹幕、打赏（有限）", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "移动端一键直播",
+                "地图发现附近直播",
+                "早期直播社交形态"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时音视频推流",
+                "CDN 与多码率",
+                "多端"
+            ],
+            tech_features: [
+                "低延迟与弹幕",
+                "地图与发现",
+                "与 Twitter 账号整合"
+            ],
+            tech_challenges: [
+                "规模与成本",
+                "变现",
+                "已关闭"
+            ]
         }
     },
     notion: {
@@ -7445,7 +8765,8 @@ const communityCases = {
             { year: "2016", event: "Notion成立" },
             { year: "2018", event: "推出个人免费版" },
             { year: "2020", event: "疫情期间用户激增" },
-            { year: "2022", event: "推出AI功能" }
+            { year: "2022", event: "推出AI功能" },
+            { year: "2024", event: "AI能力持续增强，与日历、项目等深度整合" }
         ],
         key_decisions: [
             "块状结构设计，灵活组合",
@@ -7504,6 +8825,59 @@ const communityCases = {
                 cac: "口碑与内容营销",
                 conversion_rate: "免费转付费约4%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Coda", similarity: 75, position: "文档+表格+自动化竞品" },
+                { name: "Airtable", similarity: 60, position: "表格与数据库" },
+                { name: "Confluence", similarity: 50, position: "企业知识库" },
+                { name: "飞书文档", similarity: 65, position: "中国区协作与文档" }
+            ],
+            market_position: "All-in-one 工作空间与知识管理领导者之一",
+            market_share: "全球知识管理/协作工具份额约 20%+",
+            competitive_advantages: [
+                "块状结构灵活，文档/数据库/看板统一",
+                "个人免费与模板社区拉新",
+                "AI 写作与总结集成",
+                "多端同步与协作体验"
+            ],
+            competitive_disadvantages: [
+                "学习曲线陡，功能复杂",
+                "与 Coda/Airtable/Confluence 竞争",
+                "企业版与权限需持续完善"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "Block 块", description: "段落、标题、列表、代码、嵌入等可嵌套块", importance: "核心功能" },
+                { name: "Database", description: "表格/看板/日历/画廊视图，关联与筛选", importance: "核心功能" },
+                { name: "Wiki 与链接", description: "页面互链、模板与知识库", importance: "核心功能" },
+                { name: "协作", description: "实时编辑、评论、@ 与权限", importance: "核心功能" },
+                { name: "AI", description: "写作、总结、翻译、头脑风暴", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "块状结构统一文档与数据库",
+                "模板市场与社区",
+                "个人免费带动团队转化"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时协作与 CRDT/OT",
+                "块存储与版本历史",
+                "多端同步（Web/Desktop/Mobile）",
+                "AI 集成与嵌入"
+            ],
+            tech_features: [
+                "API 与集成（Slack、GitHub 等）",
+                "模板与导入导出",
+                "权限与 SSO（企业版）"
+            ],
+            tech_challenges: [
+                "复杂功能与上手成本",
+                "大规模实时协作与性能",
+                "与 Coda/Airtable 功能边界"
+            ]
         }
     },
     threads: {
@@ -7581,6 +8955,56 @@ const communityCases = {
                 cac: "Instagram 导流",
                 conversion_rate: "留存与时长待提升"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Twitter/X", similarity: 90, position: "短文本社交直接竞品" },
+                { name: "Bluesky", similarity: 70, position: "开放协议替代" },
+                { name: "Mastodon", similarity: 55, position: "联邦制替代" }
+            ],
+            market_position: "Meta 系短文本社交，Twitter 替代选项",
+            market_share: "短文本社交份额增长中，依赖 Instagram 导流",
+            competitive_advantages: [
+                "Instagram 账号一键注册与粉丝迁移",
+                "Meta 广告与生态整合",
+                "无字数限制与多媒体",
+                "冷启动 5 天 1 亿用户"
+            ],
+            competitive_disadvantages: [
+                "留存与时长不及 Twitter 替代预期",
+                "内容质量与社区氛围待建",
+                "欧盟等区合规与延迟上线"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "帖子", description: "文本、图、视频、链接，500 字内", importance: "核心功能" },
+                { name: "时间线", description: "For You 与关注流", importance: "核心功能" },
+                { name: "与 Instagram 联动", description: "关注同步、跨平台分享", importance: "核心功能" },
+                { name: "回复与引用", description: "回复、引用转发", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "Instagram 一键注册与冷启动",
+                "无 280 字限制",
+                "Meta 账号与推荐打通"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Meta 账号与推荐基础设施",
+                "Feed 排序与去重",
+                "多端与 API"
+            ],
+            tech_features: [
+                "与 Instagram 关注同步",
+                "联邦协议（ActivityPub）规划",
+                "搜索与发现"
+            ],
+            tech_challenges: [
+                "留存与 DAU/时长",
+                "与 X/Bluesky 差异化",
+                "广告与变现节奏"
+            ]
         }
     },
     feishu: {
@@ -7600,7 +9024,8 @@ const communityCases = {
             { year: "2016", event: "飞书上线" },
             { year: "2019", event: "正式对外发布" },
             { year: "2020", event: "疫情期间用户增长" },
-            { year: "2022", event: "推出AI功能" }
+            { year: "2022", event: "推出AI功能" },
+            { year: "2024", event: "持续强化AI写作与会议能力，拓展企业市场" }
         ],
         key_decisions: [
             "文档协作为核心功能",
@@ -7659,6 +9084,58 @@ const communityCases = {
                 cac: "销售与品牌",
                 conversion_rate: "免费转付费企业"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "钉钉", similarity: 90, position: "企业协作直接竞品" },
+                { name: "企业微信", similarity: 85, position: "企业协作与私域" },
+                { name: "Notion", similarity: 55, position: "文档与知识库" }
+            ],
+            market_position: "中国企协与效率工具领先者之一",
+            market_share: "中国企协市场约 25%+（与钉钉、企微三分）",
+            competitive_advantages: [
+                "文档、表格、多维表与会议一体化",
+                "信息透明与协作体验",
+                "OKR、审批、项目与 BPM",
+                "字节生态与 AI 能力"
+            ],
+            competitive_disadvantages: [
+                "与钉钉、企微争大客户",
+                "海外与本地化",
+                "盈利与投入平衡"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "云文档", description: "文档、表格、多维表、思维笔记", importance: "核心功能" },
+                { name: "即时沟通", description: "群聊、频道、机器人、消息聚合", importance: "核心功能" },
+                { name: "日历与会议", description: "预约、会议、妙记与纪要", importance: "核心功能" },
+                { name: "OKR 与审批", description: "目标、审批流、BPM", importance: "扩展功能" },
+                { name: "应用与开放平台", description: "低代码、集成、API", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "文档即协作与信息透明",
+                "妙记与 AI 纪要",
+                "多维表与自动化"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时协作与文档引擎",
+                "音视频与会议",
+                "开放平台与 API",
+                "AI 总结与妙记"
+            ],
+            tech_features: [
+                "多端与离线",
+                "权限与 SSO",
+                "与字节产品打通"
+            ],
+            tech_challenges: [
+                "与钉钉/企微大客户竞争",
+                "规模化与成本",
+                "海外与合规"
+            ]
         }
     },
     dingtalk: {
@@ -7737,6 +9214,58 @@ const communityCases = {
                 cac: "销售与地推",
                 conversion_rate: "免费转付费组织"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "飞书", similarity: 90, position: "企业协作直接竞品" },
+                { name: "企业微信", similarity: 85, position: "企业协作与私域" },
+                { name: "Slack", similarity: 50, position: "海外协作" }
+            ],
+            market_position: "中国企协与组织数字化领导者",
+            market_share: "中国企协 DAU/组织数领先",
+            competitive_advantages: [
+                "组织架构与通讯录为核心",
+                "应用市场与低代码生态",
+                "考勤、审批、钉消息强场景",
+                "阿里生态与政企渗透"
+            ],
+            competitive_disadvantages: [
+                "功能复杂与学习成本",
+                "与飞书、企微争大客户",
+                "体验与「简洁」叙事弱于飞书"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "消息与群", description: "单聊、群聊、钉消息、已读未读", importance: "核心功能" },
+                { name: "工作台", description: "应用入口、考勤、审批、日志", importance: "核心功能" },
+                { name: "会议与直播", description: "视频会议、直播、录制", importance: "核心功能" },
+                { name: "应用与低代码", description: "宜搭、应用市场、开放平台", importance: "扩展功能" },
+                { name: "考勤与审批", description: "打卡、请假、审批流", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "钉消息与 DING 强触达",
+                "组织架构即权限与分发",
+                "低代码与应用生态"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "即时通讯与多端",
+                "音视频与会议",
+                "开放平台与 API",
+                "低代码与表单引擎"
+            ],
+            tech_features: [
+                "多端与硬件（考勤机等）",
+                "与阿里云、淘宝等打通",
+                "权限与 SSO"
+            ],
+            tech_challenges: [
+                "与飞书/企微体验与心智竞争",
+                "复杂度与易用性",
+                "政企与中小企业平衡"
+            ]
         }
     },
     maimai: {
@@ -7816,6 +9345,56 @@ const communityCases = {
                 cac: "品牌与销售",
                 conversion_rate: "会员与招聘转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "LinkedIn", similarity: 75, position: "职场社交国际竞品" },
+                { name: "智联/前程无忧", similarity: 50, position: "招聘平台竞品" },
+                { name: "小红书/微博", similarity: 40, position: "职场话题间接竞品" }
+            ],
+            market_position: "中国职场社交与匿名爆料领先平台",
+            market_share: "职场社交细分领先",
+            competitive_advantages: [
+                "匿名爆料与职场信息",
+                "招聘与会员变现",
+                "实名+匿名混合"
+            ],
+            competitive_disadvantages: [
+                "内容合规与口碑",
+                "与 LinkedIn 国际化差距",
+                "用户增长放缓"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "职场动态", description: "实名动态、匿名爆料、话题", importance: "核心功能" },
+                { name: "人脉与认证", description: "好友、二度人脉、公司认证", importance: "核心功能" },
+                { name: "招聘", description: "职位、简历、猎头、企业服务", importance: "核心功能" },
+                { name: "会员", description: "会员权益、谁看过我、消息", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "匿名爆料与职场真相",
+                "人脉与招聘闭环",
+                "职场社区与信息"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "推荐与信息流",
+                "实名与匿名身份",
+                "招聘与简历匹配",
+                "多端"
+            ],
+            tech_features: [
+                "动态与话题",
+                "人脉图与二度",
+                "会员与支付"
+            ],
+            tech_challenges: [
+                "内容审核与合规",
+                "与招聘平台差异化",
+                "留存与商业化"
+            ]
         }
     },
     genshin_impact: {
@@ -7855,6 +9434,56 @@ const communityCases = {
         key_metrics: {
             core_metrics: { dau: "约2000万", mau: "约6000万", engagement_rate: "70%", retention_7d: "75%", retention_30d: "65%" },
             content_metrics: { community_posts: "多平台社区", ugc: "二创与攻略" }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Honkai Impact 3rd", similarity: 75, position: "同厂二次元游戏" },
+                { name: "Genshin 类开放世界", similarity: 70, position: "开放世界RPG竞品" },
+                { name: "Discord/Reddit 社区", similarity: 50, position: "社区讨论间接竞品" }
+            ],
+            market_position: "全球二次元开放世界游戏与社区领先",
+            market_share: "二次元游戏与社区头部",
+            competitive_advantages: [
+                "高质量内容与IP",
+                "多平台社区与二创",
+                "全球化与长线运营"
+            ],
+            competitive_disadvantages: [
+                "生命周期与用户疲劳",
+                "竞品与品类竞争",
+                "社区治理与合规"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "开放世界", description: "大世界探索、任务、角色养成", importance: "核心功能" },
+                { name: "抽卡与角色", description: "角色、武器、命座与皮肤", importance: "核心功能" },
+                { name: "多平台", description: "PC/主机/移动、云游戏", importance: "核心功能" },
+                { name: "社区与活动", description: "版本活动、联动、二创", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "开放世界+二次元+多平台",
+                "角色IP与二创生态",
+                "全球同步版本"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "跨平台引擎与渲染",
+                "多端存档与同步",
+                "反作弊与安全",
+                "多语言与本地化"
+            ],
+            tech_features: [
+                "大世界与性能",
+                "抽卡与经济",
+                "社区与UGC"
+            ],
+            tech_challenges: [
+                "内容量与更新节奏",
+                "多端体验一致",
+                "长线留存与付费"
+            ]
         }
     },
     league_of_legends: {
@@ -7894,6 +9523,56 @@ const communityCases = {
         key_metrics: {
             core_metrics: { dau: "约5000万", mau: "约1.5亿", engagement_rate: "75%", retention_7d: "78%", retention_30d: "70%" },
             content_metrics: { esports: "全球赛事", ugc: "攻略与二创" }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Dota 2", similarity: 90, position: "MOBA 直接竞品" },
+                { name: "VALORANT", similarity: 50, position: "同厂竞技游戏" },
+                { name: "其他 MOBA/电竞", similarity: 70, position: "品类竞品" }
+            ],
+            market_position: "全球 MOBA 与电竞赛事领先",
+            market_share: "MOBA 与电竞头部",
+            competitive_advantages: [
+                "赛事体系与观赛",
+                "IP 与动画、音乐",
+                "长线运营与平衡"
+            ],
+            competitive_disadvantages: [
+                "游戏老化与新手门槛",
+                "与手游 MOBA 竞争",
+                "依赖核心玩家"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "5v5 MOBA", description: "对局、排位、匹配、英雄与技能", importance: "核心功能" },
+                { name: "赛事与观赛", description: "职业联赛、世界赛、直播与回放", importance: "核心功能" },
+                { name: "皮肤与通行证", description: "皮肤、表情、通行证、活动", importance: "核心功能" },
+                { name: "社区与内容", description: "攻略、二创、客户端资讯", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "电竞赛事体系",
+                "IP 扩展（动画、音乐）",
+                "全球多区域运营"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "游戏引擎与网络同步",
+                "反作弊与公平性",
+                "多区域与延迟",
+                "观赛与直播"
+            ],
+            tech_features: [
+                "匹配与排位",
+                "赛事数据与回放",
+                "客户端与活动"
+            ],
+            tech_challenges: [
+                "新手体验与留存",
+                "平衡与版本",
+                "长线内容与商业化"
+            ]
         }
     },
     spotify: {
@@ -8143,6 +9822,57 @@ const communityCases = {
                 cac: "品牌与内容营销",
                 conversion_rate: "试用转付费高"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Disney+", similarity: 85, position: "流媒体直接竞品" },
+                { name: "Amazon Prime Video", similarity: 80, position: "流媒体直接竞品" },
+                { name: "HBO Max", similarity: 75, position: "流媒体直接竞品" }
+            ],
+            market_position: "全球流媒体订阅第一梯队",
+            market_share: "全球流媒体约20%+",
+            competitive_advantages: [
+                "原创内容与品牌",
+                "推荐算法与体验",
+                "全球化与多语言"
+            ],
+            competitive_disadvantages: [
+                "内容成本高",
+                "密码共享限制影响增长",
+                "竞争加剧"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "流媒体播放", description: "多码率、多端、下载", importance: "核心功能" },
+                { name: "推荐系统", description: "个性化首页与续看", importance: "核心功能" },
+                { name: "原创内容", description: "剧集、电影、纪录片", importance: "核心功能" },
+                { name: "个人列表与继续观看", description: "我的列表、进度同步", importance: "核心功能" },
+                { name: "多 profile", description: "家庭账号与儿童模式", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "算法推荐与个性化",
+                "原创内容战略",
+                "无广告订阅体验"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "CDN 与多码率流媒体",
+                "推荐与个性化算法",
+                "多端客户端与 DRM",
+                "内容制作与发行"
+            ],
+            tech_features: [
+                "自适应码率",
+                "A/B 测试与推荐",
+                "全球化部署"
+            ],
+            tech_challenges: [
+                "内容成本与 ROI",
+                "与 Disney+/Prime 竞争",
+                "密码共享与留存"
+            ]
         }
     },
     airbnb: {
@@ -8221,6 +9951,57 @@ const communityCases = {
                 cac: "品牌与绩效",
                 conversion_rate: "搜索转预订"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Booking.com", similarity: 70, position: "住宿预订直接竞品" },
+                { name: "VRBO", similarity: 85, position: "短租直接竞品" },
+                { name: "酒店集团", similarity: 50, position: "住宿间接竞品" }
+            ],
+            market_position: "全球短租与本地体验领先平台",
+            market_share: "全球短租市场约20%+",
+            competitive_advantages: [
+                "独特房源与本地体验",
+                "信任与评价体系",
+                "品牌与社区"
+            ],
+            competitive_disadvantages: [
+                "监管与合规压力",
+                "安全与信任事件",
+                "与酒店竞争加剧"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "房源搜索与筛选", description: "地图、日期、人数、设施", importance: "核心功能" },
+                { name: "预订与支付", description: "即时/申请预订、安全支付", importance: "核心功能" },
+                { name: "评价与信任", description: "房东/房客评价、验证、保障", importance: "核心功能" },
+                { name: "体验 (Experiences)", description: "本地活动与体验预订", importance: "核心功能" },
+                { name: "消息与日历", description: "与房东沟通、日历同步", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "信任系统与评价",
+                "本地体验差异化",
+                "房东工具与保险"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "搜索与推荐",
+                "支付与风控",
+                "地图与日历",
+                "多端与国际化"
+            ],
+            tech_features: [
+                "动态定价与可用性",
+                "评价与排名",
+                "客服与争议"
+            ],
+            tech_challenges: [
+                "监管与税务",
+                "安全与信任",
+                "与 OTA/酒店竞争"
+            ]
         }
     },
     uber: {
@@ -8299,6 +10080,57 @@ const communityCases = {
                 cac: "补贴与品牌",
                 conversion_rate: "下载转首单"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Lyft", similarity: 90, position: "出行直接竞品" },
+                { name: "滴滴", similarity: 85, position: "区域出行竞品" },
+                { name: "Grab / Ola", similarity: 80, position: "区域出行竞品" }
+            ],
+            market_position: "全球共享出行领先平台",
+            market_share: "美国等市场约70%+",
+            competitive_advantages: [
+                "网络效应与规模",
+                "动态定价与调度",
+                "多产品（出行+外卖）"
+            ],
+            competitive_disadvantages: [
+                "司机权益与监管",
+                "补贴与盈利平衡",
+                "区域竞争"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "叫车", description: "实时叫车、预约、拼车", importance: "核心功能" },
+                { name: "动态定价", description: "实时价格与预估", importance: "核心功能" },
+                { name: "司机端", description: "接单、导航、收入", importance: "核心功能" },
+                { name: "评价与安全", description: "双向评价、行程分享、紧急", importance: "核心功能" },
+                { name: "Uber Eats", description: "外卖与配送", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "实时匹配与动态定价",
+                "多产品平台",
+                "全球标准化体验"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "实时匹配与调度",
+                "地图与 ETA",
+                "支付与分账",
+                "多端与国际化"
+            ],
+            tech_features: [
+                "动态定价算法",
+                "司机激励与合规",
+                "客服与争议"
+            ],
+            tech_challenges: [
+                "司机留存与权益",
+                "监管与分类",
+                "盈利与补贴"
+            ]
         }
     },
     tinder: {
@@ -8377,6 +10209,57 @@ const communityCases = {
                 cac: "应用商店与品牌",
                 conversion_rate: "免费转付费约5%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Bumble", similarity: 90, position: "约会应用直接竞品" },
+                { name: "Hinge", similarity: 85, position: "约会应用直接竞品" },
+                { name: "Match.com", similarity: 70, position: "同集团多品牌" }
+            ],
+            market_position: "全球约会应用 MAU 第一",
+            market_share: "约会应用市场约50%+",
+            competitive_advantages: [
+                "品牌与规模",
+                "左滑右滑简单交互",
+                "订阅与 IAP 变现"
+            ],
+            competitive_disadvantages: [
+                "用户流失与信任",
+                "竞品差异化",
+                "付费转化依赖功能墙"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "卡片浏览", description: "左滑/右滑、超级喜欢", importance: "核心功能" },
+                { name: "匹配与聊天", description: "匹配后解锁聊天", importance: "核心功能" },
+                { name: "个人资料", description: "照片、简介、视频、Prompt", importance: "核心功能" },
+                { name: "订阅与 Boost", description: "Gold/Platinum、Boost、无限右滑", importance: "核心功能" },
+                { name: "安全与验证", description: "照片验证、举报、安全中心", importance: "核心功能" }
+            ],
+            innovative_features: [
+                "左滑右滑简化决策",
+                "游戏化与订阅墙",
+                "视频资料与互动"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "推荐与匹配算法",
+                "实时聊天与推送",
+                "支付与订阅",
+                "多端与本地化"
+            ],
+            tech_features: [
+                "地理位置与偏好",
+                "防欺诈与安全",
+                "A/B 与变现"
+            ],
+            tech_challenges: [
+                "留存与匹配质量",
+                "与 Bumble/Hinge 差异化",
+                "付费与体验平衡"
+            ]
         }
     },
     duolingo: {
@@ -8455,6 +10338,57 @@ const communityCases = {
                 cac: "口碑与品牌",
                 conversion_rate: "免费转 Plus 约5%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Babbel", similarity: 85, position: "语言学习直接竞品" },
+                { name: "Rosetta Stone", similarity: 70, position: "语言学习竞品" },
+                { name: "多邻国儿童/学校", similarity: 60, position: "教育场景扩展" }
+            ],
+            market_position: "全球语言学习 App 月活第一",
+            market_share: "语言学习 App 市场约50%+",
+            competitive_advantages: [
+                "免费+游戏化获客",
+                "品牌与多语种",
+                "AI 与个性化"
+            ],
+            competitive_disadvantages: [
+                "学习效果争议",
+                "留存与完成率",
+                "付费转化依赖功能"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "课程与单元", description: "多语种课程、听说读写", importance: "核心功能" },
+                { name: "游戏化", description: "心、连击、排行榜、联赛", importance: "核心功能" },
+                { name: "打卡与 streak", description: "每日目标、连续天数", importance: "核心功能" },
+                { name: "Duolingo Plus", description: "去广告、离线、无限心", importance: "核心功能" },
+                { name: "AI 与个性化", description: "难度调节、复习、Duo 助手", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "游戏化与 streak",
+                "免费获客与 Plus 转化",
+                "AI 自适应学习"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "多语种课程与语音",
+                "游戏化与进度",
+                "推荐与 AI",
+                "多端与离线"
+            ],
+            tech_features: [
+                "语音识别与 TTS",
+                "A/B 与留存",
+                "订阅与支付"
+            ],
+            tech_challenges: [
+                "学习效果与完成率",
+                "与 Babbel 等差异化",
+                "变现与体验"
+            ]
         }
     },
     coursera: {
@@ -8533,6 +10467,57 @@ const communityCases = {
                 cac: "品牌与高校",
                 conversion_rate: "免费试听转付费"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "edX", similarity: 85, position: "慕课直接竞品" },
+                { name: "Udemy", similarity: 60, position: "在线课程竞品" },
+                { name: "LinkedIn Learning", similarity: 50, position: "职场学习竞品" }
+            ],
+            market_position: "慕课与高校合作领先平台",
+            market_share: "慕课市场约25%+",
+            competitive_advantages: [
+                "高校与证书权威",
+                "专项与学位",
+                "企业培训"
+            ],
+            competitive_disadvantages: [
+                "完成率低",
+                "证书价值争议",
+                "与 Udemy 等竞争"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "课程目录", description: "单课、专项、学位、合作高校", importance: "核心功能" },
+                { name: "学习与作业", description: "视频、测验、作业、讨论", importance: "核心功能" },
+                { name: "证书与学位", description: "结业证、专业证书、学位", importance: "核心功能" },
+                { name: "Coursera Plus", description: "订阅畅学多数课程", importance: "核心功能" },
+                { name: "企业学习", description: "团队与组织培训", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "高校合作与证书",
+                "专项课程提升完成",
+                "企业培训拓展"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "视频与测验",
+                "讨论与作业",
+                "证书与身份",
+                "多端与多语言"
+            ],
+            tech_features: [
+                "推荐与搜索",
+                "进度与提醒",
+                "支付与订阅"
+            ],
+            tech_challenges: [
+                "完成率与体验",
+                "与 edX/Udemy 差异化",
+                "企业产品与合规"
+            ]
         }
     },
     goodreads: {
@@ -8611,6 +10596,57 @@ const communityCases = {
                 cac: "口碑与 Amazon",
                 conversion_rate: "点击购书转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Amazon 书评", similarity: 60, position: "书评与购书竞品" },
+                { name: "LibraryThing", similarity: 70, position: "读书社区竞品" },
+                { name: "豆瓣读书", similarity: 65, position: "区域读书社区" }
+            ],
+            market_position: "全球最大读书社区（Amazon 旗下）",
+            market_share: "读书社区与书评领先",
+            competitive_advantages: [
+                "规模与 UGC 书评",
+                "阅读挑战与社交",
+                "Amazon 导流与数据"
+            ],
+            competitive_disadvantages: [
+                "产品更新慢",
+                "商业化与体验冲突",
+                "依赖 Amazon 战略"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "书架与想读", description: "在读、想读、已读、评分", importance: "核心功能" },
+                { name: "书评与讨论", description: "评论、讨论组、引用", importance: "核心功能" },
+                { name: "推荐与发现", description: "算法推荐、列表、阅读挑战", importance: "核心功能" },
+                { name: "作者与书籍页", description: "作者主页、系列、推荐", importance: "核心功能" },
+                { name: "购书链接", description: "Amazon 等关联与分成", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "阅读挑战与年度总结",
+                "社交推荐与列表",
+                "与 Kindle/Amazon 整合"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "书籍元数据与搜索",
+                "推荐与社交图",
+                "讨论与通知",
+                "多端与 Amazon 集成"
+            ],
+            tech_features: [
+                "列表与挑战",
+                "广告与分成",
+                "API 与数据"
+            ],
+            tech_challenges: [
+                "产品迭代与体验",
+                "商业化与社区平衡",
+                "与 Kindle 协同"
+            ]
         }
     },
     letterboxd: {
@@ -8689,6 +10725,57 @@ const communityCases = {
                 cac: "口碑",
                 conversion_rate: "Pro 转化约3%"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "IMDb", similarity: 60, position: "电影数据与评论竞品" },
+                { name: "豆瓣电影", similarity: 70, position: "区域影评社区" },
+                { name: "JustWatch", similarity: 40, position: "观影发现间接竞品" }
+            ],
+            market_position: "电影爱好者垂直社区领先",
+            market_share: "电影社区细分市场领先",
+            competitive_advantages: [
+                "观影日记与列表",
+                "影迷社区与榜单",
+                "小而美体验"
+            ],
+            competitive_disadvantages: [
+                "用户规模有限",
+                "增长依赖口碑",
+                "与流媒体发现竞争"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "观影日记", description: "标记、评分、日期、评论", importance: "核心功能" },
+                { name: "列表", description: "个人与公开列表、榜单", importance: "核心功能" },
+                { name: "影评与讨论", description: "短评、长评、讨论", importance: "核心功能" },
+                { name: "发现", description: "推荐、流行、好友动态", importance: "核心功能" },
+                { name: "Pro", description: "无广告、统计、导出、徽章", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "观影日记与年度总结",
+                "列表与榜单文化",
+                "影迷身份与社交"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "电影元数据与 TMDB 等",
+                "社交与推荐",
+                "列表与搜索",
+                "多端与订阅"
+            ],
+            tech_features: [
+                "日记与统计",
+                "Pro 与支付",
+                "API 与第三方"
+            ],
+            tech_challenges: [
+                "规模与留存",
+                "与 IMDb/流媒体差异化",
+                "商业化与体验"
+            ]
         }
     },
     producthunt: {
@@ -8767,6 +10854,57 @@ const communityCases = {
                 cac: "口碑与社区",
                 conversion_rate: "Maker 付费"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "BetaList / Launching Next", similarity: 75, position: "产品发布社区竞品" },
+                { name: "Twitter/X 产品圈", similarity: 50, position: "产品发现间接竞品" },
+                { name: "Indie Hackers", similarity: 55, position: "创业者社区竞品" }
+            ],
+            market_position: "产品发现与 Maker 社区标杆",
+            market_share: "产品发布与发现细分领先",
+            competitive_advantages: [
+                "每日发布仪式感",
+                "投票与讨论",
+                "YC 生态与品牌"
+            ],
+            competitive_disadvantages: [
+                "活跃度波动",
+                "商业化与社区平衡",
+                "依赖 YC 资源"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "每日产品", description: "每日上新、封面、链接与 tag", importance: "核心功能" },
+                { name: "投票与评论", description: "upvote、评论、Maker 回复", importance: "核心功能" },
+                { name: "Maker 与公司", description: "Maker 主页、公司页、关注", importance: "核心功能" },
+                { name: "榜单与搜索", description: "今日/本周/本月、分类、搜索", importance: "核心功能" },
+                { name: "Maker 订阅", description: "付费推广与工具", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "每日发布与投票排名",
+                "Maker 与创始人社区",
+                "产品发现与讨论"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "产品提交与审核",
+                "投票与排序",
+                "邮件与通知",
+                "多端与 API"
+            ],
+            tech_features: [
+                "榜单与时间窗",
+                "Maker 工具与订阅",
+                "与 YC 生态集成"
+            ],
+            tech_challenges: [
+                "活跃度与留存",
+                "商业化与社区",
+                "与 Twitter 等竞争注意力"
+            ]
         }
     },
     indiehackers: {
@@ -8923,6 +11061,57 @@ const communityCases = {
                 cac: "口碑",
                 conversion_rate: "N/A"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "Reddit 科技版", similarity: 65, position: "科技讨论间接竞品" },
+                { name: "Lobsters", similarity: 80, position: "技术链接社区竞品" },
+                { name: "Twitter/X 科技圈", similarity: 45, position: "信息流间接竞品" }
+            ],
+            market_position: "科技与创业圈高质量链接与讨论社区",
+            market_share: "技术社区细分领先",
+            competitive_advantages: [
+                "投票与算法保证质量",
+                "YC 生态与人才",
+                "极简与专注"
+            ],
+            competitive_disadvantages: [
+                "界面老旧",
+                "增长缓慢",
+                "非营利依赖 YC"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "链接提交", description: "标题、URL、正文可选", importance: "核心功能" },
+                { name: "投票与排序", description: "upvote、热度与时间排序", importance: "核心功能" },
+                { name: "评论", description: "树状评论、回复", importance: "核心功能" },
+                { name: "用户与 karma", description: "用户页、karma、提交历史", importance: "核心功能" },
+                { name: "Ask/Show/Job", description: "分类与版块", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "投票算法与质量",
+                "极简界面与专注",
+                "非营利与社区治理"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "Arc 语言与定制框架",
+                "投票与排序算法",
+                "评论树与通知",
+                "文本与链接"
+            ],
+            tech_features: [
+                "防作弊与反 spam",
+                "RSS 与 API",
+                "移动端与 PWA"
+            ],
+            tech_challenges: [
+                "界面与体验现代化",
+                "规模与性能",
+                "保持质量与开放"
+            ]
         }
     },
     deviantart: {
@@ -9002,6 +11191,56 @@ const communityCases = {
                 cac: "口碑",
                 conversion_rate: "会员与销售转化"
             }
+        },
+        competitive_landscape: {
+            main_competitors: [
+                { name: "ArtStation", similarity: 85, position: "数字艺术社区直接竞品" },
+                { name: "Behance", similarity: 80, position: "设计作品集竞品" },
+                { name: "Instagram/Pinterest", similarity: 50, position: "视觉发现间接竞品" }
+            ],
+            market_position: "全球艺术创作与插画社区领先（Wix 旗下）",
+            market_share: "艺术社区细分领先",
+            competitive_advantages: [
+                "历史与规模",
+                "收藏与社区",
+                "打印与销售"
+            ],
+            competitive_disadvantages: [
+                "产品更新慢",
+                "与 ArtStation/Behance 竞争",
+                "商业化与创作者平衡"
+            ]
+        },
+        product_features: {
+            core_features: [
+                { name: "作品展示", description: "上传、分类、描述、标签", importance: "核心功能" },
+                { name: "收藏与关注", description: "收藏夹、关注作者、动态", importance: "核心功能" },
+                { name: "评论与互动", description: "评论、点赞、收藏", importance: "核心功能" },
+                { name: "Core 会员与销售", description: "无广告、打印、数字销售", importance: "扩展功能" }
+            ],
+            innovative_features: [
+                "早期艺术社区形态",
+                "打印与数字销售",
+                "收藏与发现"
+            ]
+        },
+        tech_stack: {
+            core_technologies: [
+                "图片存储与 CDN",
+                "搜索与推荐",
+                "打印与支付",
+                "多端"
+            ],
+            tech_features: [
+                "作品与画廊",
+                "收藏与关注流",
+                "Core 与销售"
+            ],
+            tech_challenges: [
+                "规模与存储",
+                "与 Wix 整合",
+                "创作者与商业化"
+            ]
         }
     },
     artstation: {
@@ -22699,4 +24938,5 @@ const communityCases = {
 };
 
 // Export for usage if using modules, but here we just load it globally
-// window.communityCases = communityCases; 
+// window.communityCases = communityCases;
+if (typeof module !== 'undefined' && module.exports) module.exports = communityCases; 

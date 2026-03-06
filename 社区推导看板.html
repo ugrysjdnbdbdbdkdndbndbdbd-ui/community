@@ -537,6 +537,45 @@
             animation: toastSlideOut 0.3s ease-in forwards;
         }
         
+        /* ========== 全站微动效与交互增强 ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-in { animation: fadeInUp var(--transition-base) ease-out forwards; }
+        .animate-in-slow { animation: fadeInUp var(--transition-slow) ease-out forwards; }
+        .animate-fade-in { animation: fadeIn var(--transition-fast) ease-out forwards; }
+        .stagger-1 { animation-delay: 30ms; }
+        .stagger-2 { animation-delay: 60ms; }
+        .stagger-3 { animation-delay: 90ms; }
+        .stagger-4 { animation-delay: 120ms; }
+        /* 按钮按下态 */
+        .btn-press:active, button:active:not(:disabled), [role="button"]:active:not(:disabled) {
+            transform: scale(0.98);
+            transition: transform var(--transition-fast);
+        }
+        /* 全局焦点环：键盘导航可见、主题色，浅色/深色区均可用 */
+        .focus-ring:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.45);
+            transition: box-shadow var(--transition-fast);
+        }
+        #global-search:focus-visible { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5); }
+        /* 可点击项统一过渡 */
+        .search-result-item, .nav-19d-item, [data-view], .card, .feature-card {
+            transition: transform var(--transition-fast), box-shadow var(--transition-base), background-color var(--transition-fast);
+        }
+        .search-result-item:hover, .nav-19d-item:hover { background-color: rgba(99, 102, 241, 0.08); }
+        /* 减少动效偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            .animate-in, .animate-in-slow, .animate-fade-in { animation: none; opacity: 1; transform: none; }
+            .btn-press:active, button:active { transform: none; }
+        }
+        
         /* Ensure nav buttons are always clickable */
         button[data-view] {
             position: relative;
@@ -1667,8 +1706,9 @@
             <!-- Global Search -->
             <div class="w-full xl:w-auto mb-2 xl:mb-0 order-3 xl:order-2 flex-shrink-0">
                 <div class="relative max-w-md mx-auto xl:mx-0 search-container">
-                    <input type="text" id="global-search" placeholder="搜索案例、理论... (⌘K 聚焦 · ? AI查询)" 
-                           class="w-full px-4 py-2 pl-10 pr-20 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    <input type="text" id="global-search" placeholder="搜索案例、理论… 输入 ? 可 AI 提问" 
+                           class="w-full px-4 py-2 pl-10 pr-20 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all focus-ring"
+                           aria-label="全局搜索案例与理论"
                            oninput="app.debouncedSearch(this.value)"
                            onkeydown="if(event.key==='Escape') { this.value=''; app.handleGlobalSearch(''); document.getElementById('search-results').classList.add('hidden'); } else if(event.key==='Enter' && this.value.trim().startsWith('?')) { app.handleNaturalLanguageQuery(this.value); } else if(event.key==='Enter') { event.preventDefault(); var sr=document.getElementById('search-results'); if(sr&&!sr.classList.contains('hidden')) { var first=sr.querySelector('.search-result-item'); if(first) first.click(); } }"
                            onfocus="if(this.value.trim()) document.getElementById('search-results').classList.remove('hidden')">
@@ -1701,7 +1741,7 @@
                         </button>
                         <div id="nav-19d-dropdown" class="nav-19d-panel" role="menu">
                             <div class="nav-19d-search">
-                                <input type="text" id="nav-19d-filter" placeholder="输入序号或关键词筛选..." autocomplete="off"
+                                <input type="text" id="nav-19d-filter" placeholder="输入序号或关键词快速筛选维度…" autocomplete="off"
                                        oninput="app.filterNav19d(this.value);" onkeydown="app.handleNav19dKeydown(event);">
                             </div>
                             <div class="nav-19d-list">
@@ -1748,7 +1788,7 @@
                                     <button type="button" data-view="view-memetics" data-filter="7c 模因与文化" id="btn-view-memetics" class="nav-19d-item" onclick="app.selectNav19d('view-memetics');">🧩<span class="num">7c</span>模因与文化</button>
                                     <button type="button" data-view="view-mechanism" data-filter="7d 机制与设计" id="btn-view-mechanism" class="nav-19d-item" onclick="app.selectNav19d('view-mechanism');">♟️<span class="num">7d</span>机制与设计</button>
                                 </div>
-                                <div id="nav-19d-empty" class="nav-19d-empty" style="display:none;">未找到匹配的维度</div>
+                                <div id="nav-19d-empty" class="nav-19d-empty" style="display:none;">暂无匹配的维度，试试其他关键词</div>
                             </div>
                         </div>
                     </div>
@@ -1772,7 +1812,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay hidden">
         <div class="loading-spinner"></div>
-        <p class="text-gray-600 font-medium">加载中...</p>
+        <p class="text-gray-600 font-medium animate-pulse">加载中，请稍候…</p>
     </div>
     
     <!-- Floating Shortcut Hint -->
@@ -1800,7 +1840,7 @@
         <!-- ================================================================================== -->
         <!-- VIEW 0: HOME PAGE - 主页 -->
         <!-- ================================================================================== -->
-        <div id="view-home" class="fade-in relative">
+        <div id="view-home" class="fade-in relative animate-in">
             <!-- 主要内容 -->
             <div class="relative z-10 min-h-screen">
                 <!-- Hero Section -->
@@ -3902,7 +3942,7 @@
                         </button>
                     </div>
                     <div class="flex-1 max-w-md">
-                        <input type="text" id="tool-search-input" placeholder="搜索工具..." oninput="app.searchTools(this.value)" class="w-full px-4 py-2 border-2 border-gray-200 rounded-full text-sm focus:outline-none focus:border-teal-400 transition">
+                        <input type="text" id="tool-search-input" placeholder="搜索工具箱内的功能…" oninput="app.searchTools(this.value)" class="w-full px-4 py-2 border-2 border-gray-200 rounded-full text-sm focus:outline-none focus:border-teal-400 transition">
                     </div>
                 </div>
             </section>
@@ -8069,7 +8109,7 @@
                                 </h3>
                                 <div class="flex items-center gap-2 text-sm text-gray-600 bg-white/80 px-3 py-1.5 rounded-full shadow-sm">
                                     <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                    <span id="case-total-count-display" class="font-semibold">加载中...</span>
+                                    <span id="case-total-count-display" class="font-semibold animate-pulse">加载中…</span>
                                 </div>
                             </div>
                             
@@ -10606,7 +10646,7 @@
             </div>
         </div>
         <div class="p-3 border-t border-gray-200 bg-white flex gap-2">
-            <input type="text" id="ai-chat-input" placeholder="输入问题..." class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeypress="if(event.key==='Enter') app.sendAIChat()">
+            <input type="text" id="ai-chat-input" placeholder="输入你的问题，如：B站和抖音的差异…" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus-ring" aria-label="AI 对话输入" onkeypress="if(event.key==='Enter') app.sendAIChat()">
             <button onclick="app.sendAIChat()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">发送</button>
         </div>
     </div>
@@ -13225,7 +13265,17 @@
             },
         };
 
-        // --- Main App Logic ---
+        // --- Global Debug: 本地/127 或 localStorage.akashic_debug=1 时输出 console；线上默认静默 log/warn，保留 error ---
+        (function(){
+            try {
+                window.__AKASHIC_DEBUG__ = /localhost|127\.0\.0\.1/.test(location.hostname) || localStorage.getItem('akashic_debug') === '1';
+                if (!window.__AKASHIC_DEBUG__) {
+                    var noop = function(){};
+                    ['log','debug','info','warn'].forEach(function(m){ if (console[m]) console[m] = noop; });
+                }
+            } catch(e) {}
+        })();
+
         // --- Utility Functions (Phase 1 Performance Optimization) ---
         // Debounce function for chart rendering optimization
         function debounce(func, wait) {
@@ -14021,7 +14071,7 @@
             },
             
             // --- Loading State Management ---
-            showLoading: function(message = '加载中...') {
+            showLoading: function(message = '加载中，请稍候…') {
                 const overlay = document.getElementById('loading-overlay');
                 if (!overlay) return;
                 
@@ -27554,7 +27604,7 @@
                             <div class="col-span-full text-center py-16 text-gray-500">
                                 <div class="text-5xl mb-4 opacity-60">⚠️</div>
                                 <p class="text-lg font-medium text-gray-600 mb-2">案例数据未加载</p>
-                                <p class="text-sm text-gray-400 mb-6">请检查 community_cases.js 文件是否正确加载</p>
+                                <p class="text-sm text-gray-400 mb-6">请确认 community_cases.js 已放在同目录并已加载</p>
                                 <button onclick="location.reload()" class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
                                     刷新页面
                                 </button>

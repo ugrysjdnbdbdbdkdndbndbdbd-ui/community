@@ -125,6 +125,16 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* 全站交互：焦点环与按下态 */
+        input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.45);
+        }
+        button:active:not(:disabled), .sidebar-item:active { transform: scale(0.98); transition: transform 0.15s ease; }
+        @media (prefers-reduced-motion: reduce) {
+            .data-card:hover { transform: none; }
+            button:active { transform: none; }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -757,13 +767,13 @@
                     </div>
 
                     <!-- 维度卡片 -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-lg font-semibold text-gray-800">⏱ 实效性</span>
                                 <button onclick="runTimelinessReport()" class="px-3 py-1.5 bg-amber-100 text-amber-800 text-sm rounded-lg hover:bg-amber-200 transition">运行</button>
                             </div>
-                            <p class="text-sm text-gray-500 mb-2">基于 timeline 最后年份判断数据是否过时，识别需更新案例</p>
+                            <p class="text-sm text-gray-500 mb-2">基于 timeline 最后年份判断数据是否过时</p>
                             <div id="info-density-timeliness-summary" class="text-xs text-gray-600">未运行</div>
                         </div>
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
@@ -771,7 +781,7 @@
                                 <span class="text-lg font-semibold text-gray-800">📊 信息增密</span>
                                 <button onclick="runDensityReport()" class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-lg hover:bg-blue-200 transition">运行</button>
                             </div>
-                            <p class="text-sm text-gray-500 mb-2">检查 user_metrics / business_model / key_metrics 完整度，输出缺失项</p>
+                            <p class="text-sm text-gray-500 mb-2">user_metrics / business_model / key_metrics 完整度</p>
                             <div id="info-density-density-summary" class="text-xs text-gray-600">未运行</div>
                         </div>
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
@@ -779,8 +789,16 @@
                                 <span class="text-lg font-semibold text-gray-800">⭐ 核心案例</span>
                                 <button onclick="runCoreDensityReport()" class="px-3 py-1.5 bg-green-100 text-green-800 text-sm rounded-lg hover:bg-green-200 transition">运行</button>
                             </div>
-                            <p class="text-sm text-gray-500 mb-2">核心案例是否具备完整三块指标，优先增密清单</p>
+                            <p class="text-sm text-gray-500 mb-2">核心案例三块指标与优先增密清单</p>
                             <div id="info-density-core-summary" class="text-xs text-gray-600">未运行</div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-lg font-semibold text-gray-800">🔄 多轮增密</span>
+                                <button onclick="runMultiRoundReport()" class="px-3 py-1.5 bg-purple-100 text-purple-800 text-sm rounded-lg hover:bg-purple-200 transition">运行</button>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-2">第1～4轮达标情况与缺失项，按轮次排期增密</p>
+                            <div id="info-density-multiround-summary" class="text-xs text-gray-600">未运行</div>
                         </div>
                     </div>
 
@@ -793,6 +811,7 @@
                                     <option value="timeliness">实效性</option>
                                     <option value="density">信息增密</option>
                                     <option value="core">核心案例增密</option>
+                                    <option value="multiRound">多轮增密</option>
                                 </select>
                                 <button onclick="exportInfoDensityReport()" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm transition">导出 CSV</button>
                                 <button onclick="exportInfoDensityReportJSON()" class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm transition">导出 JSON</button>
@@ -821,6 +840,7 @@
                             <li><strong>实效性</strong>：依据案例 timeline 最后年份与当前年份差，标记 fresh / normal / stale，便于优先更新过期案例。</li>
                             <li><strong>信息增密</strong>：对每条案例检查是否具备 user_metrics、business_model、key_metrics 及关键子字段，生成密度分与缺失项清单。</li>
                             <li><strong>核心案例增密</strong>：针对预定义核心案例列表检查完整度，导出待增密优先级列表。</li>
+                            <li><strong>多轮增密</strong>：按第1轮（基础数据）、第2轮（历程与竞争）、第3轮（产品与技术）、第4轮（理论深度）输出每案例达标情况与缺失项，便于分轮次排期增密。详见文档《案例库信息增密专项-多轮增密方案》。</li>
                             <li><strong>根据建议采集</strong>：运行报告后，可点击「对建议案例执行采集」对缺失 user_metrics / business_model 的案例执行用户数据与商业数据采集（会跳转到数据采集页并写采集日志）。</li>
                             <li>导出 CSV/JSON 后可配合线下编辑或脚本批量补数，再通过「数据同步」或直接编辑 community_cases.js 回写。</li>
                         </ul>
@@ -4468,6 +4488,10 @@
             document.getElementById('info-density-timeliness-summary').textContent = `新鲜 ${lastInfoDensityReport.timeliness.summary.fresh} / 一般 ${lastInfoDensityReport.timeliness.summary.normal} / 过时 ${lastInfoDensityReport.timeliness.summary.stale}`;
             document.getElementById('info-density-density-summary').textContent = `低 ${lastInfoDensityReport.density.summary.low} / 中 ${lastInfoDensityReport.density.summary.mid} / 高 ${lastInfoDensityReport.density.summary.high}`;
             document.getElementById('info-density-core-summary').textContent = `完整 ${lastInfoDensityReport.coreDensity.summary.ok} / 部分 ${lastInfoDensityReport.coreDensity.summary.partial} / 待补 ${lastInfoDensityReport.coreDensity.summary.low}`;
+            if (lastInfoDensityReport.multiRound && lastInfoDensityReport.multiRound.summary) {
+                var s = lastInfoDensityReport.multiRound.summary;
+                document.getElementById('info-density-multiround-summary').textContent = `第1轮满 ${s.round1Full} / 第2轮满 ${s.round2Full} / 第3轮满 ${s.round3Full} / 第4轮满 ${s.round4Full}`;
+            }
             updateInfoDensityCollectHint();
             switchInfoDensityReportView();
             showNotification('全部报告已生成', 'success');
@@ -4521,6 +4545,22 @@
             if (type === 'timeliness' && lastInfoDensityReport.timeliness) renderInfoDensityTable('timeliness', lastInfoDensityReport.timeliness);
             else if (type === 'density' && lastInfoDensityReport.density) renderInfoDensityTable('density', lastInfoDensityReport.density);
             else if (type === 'core' && lastInfoDensityReport.coreDensity) renderInfoDensityTable('core', lastInfoDensityReport.coreDensity);
+            else if (type === 'multiRound' && lastInfoDensityReport.multiRound) renderInfoDensityTable('multiRound', lastInfoDensityReport.multiRound);
+        }
+
+        function runMultiRoundReport() {
+            const cases = getCasesForInfoDensity();
+            if (!cases.length) { showNotification('无案例数据', 'error'); return; }
+            const api = window.InfoDensityReport;
+            if (!api || !api.runMultiRoundDensityReport) { showNotification('未加载 info-density-report.js 或多轮增密接口', 'error'); return; }
+            const report = api.runMultiRoundDensityReport(cases);
+            lastInfoDensityReport = lastInfoDensityReport || {};
+            lastInfoDensityReport.multiRound = report;
+            var s = report.summary;
+            document.getElementById('info-density-multiround-summary').textContent = `第1轮满 ${s.round1Full} / 第2轮满 ${s.round2Full} / 第3轮满 ${s.round3Full} / 第4轮满 ${s.round4Full}`;
+            document.getElementById('info-density-report-type').value = 'multiRound';
+            renderInfoDensityTable('multiRound', report);
+            showNotification('多轮增密报告已生成', 'success');
         }
 
         function renderInfoDensityTable(type, data) {
@@ -4533,13 +4573,16 @@
             let headers = [];
             if (type === 'timeliness') headers = ['caseKey', 'title', 'level', 'lastYear', 'gap', 'suggestion'];
             else if (type === 'density') headers = ['caseKey', 'title', 'densityScore', 'missing', 'hasUserMetrics', 'hasBusinessModel', 'hasKeyMetrics'];
+            else if (type === 'multiRound') headers = ['caseKey', 'title', 'round1Ok', 'round2Ok', 'round3Ok', 'round4Ok', 'missing1', 'missing2', 'missing3', 'missing4', 'priority'];
             else headers = ['caseKey', 'title', 'status', 'densityScore', 'missing', 'suggestion'];
-            let html = '<table class="w-full text-sm"><thead class="bg-gray-100 sticky top-0"><tr>' + headers.map(h => `<th class="px-3 py-2 text-left font-semibold text-gray-700">${h}</th>`).join('') + '</tr></thead><tbody>';
+            var headerLabels = { caseKey: '案例Key', title: '案例名', round1Ok: '第1轮', round2Ok: '第2轮', round3Ok: '第3轮', round4Ok: '第4轮', missing1: '缺失(1)', missing2: '缺失(2)', missing3: '缺失(3)', missing4: '缺失(4)', priority: '优先级' };
+            var th = headers.map(h => `<th class="px-3 py-2 text-left font-semibold text-gray-700">${headerLabels[h] || h}</th>`).join('');
+            let html = '<table class="w-full text-sm"><thead class="bg-gray-100 sticky top-0"><tr>' + th + '</tr></thead><tbody>';
             items.forEach((row, i) => {
                 html += '<tr class="border-t border-gray-200 hover:bg-gray-50">';
                 headers.forEach(h => {
                     let val = row[h];
-                    if (typeof val === 'boolean') val = val ? '是' : '否';
+                    if (typeof val === 'boolean') val = val ? '✓' : '—';
                     html += `<td class="px-3 py-2 text-gray-800">${val != null ? String(val) : ''}</td>`;
                 });
                 html += '</tr>';
@@ -4551,7 +4594,7 @@
         function exportInfoDensityReport() {
             if (!lastInfoDensityReport) { showNotification('请先运行报告', 'warning'); return; }
             const type = document.getElementById('info-density-report-type').value;
-            const data = type === 'timeliness' ? lastInfoDensityReport.timeliness : type === 'density' ? lastInfoDensityReport.density : lastInfoDensityReport.coreDensity;
+            const data = type === 'timeliness' ? lastInfoDensityReport.timeliness : type === 'density' ? lastInfoDensityReport.density : type === 'multiRound' ? lastInfoDensityReport.multiRound : lastInfoDensityReport.coreDensity;
             if (!data || !data.items || !data.items.length) { showNotification('当前报告无数据', 'warning'); return; }
             const headers = Object.keys(data.items[0]);
             const csv = [headers.join(',')].concat(data.items.map(row => headers.map(h => '"' + String(row[h] ?? '').replace(/"/g, '""') + '"').join(','))).join('\n');
